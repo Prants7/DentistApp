@@ -14,7 +14,13 @@
         </tr>
         <tr>
             <td><p th:text="#{visit.date}">visit.date</p></td>
-            <td><input type="text" th:field="*{visitTime}"/></td>
+            <td>
+                <!--input type="text" th:field="*{visitTime}"/-->
+                <select th:field="*{visitTime}">
+                    <option th:each="visitDate: ${dates}" th:value="${visitDate.toString()}" th:text="${visitDate.toString()}">
+                    </option>
+                </select>
+            </td>
             <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}">date.error</td>
         </tr>
         <tr>

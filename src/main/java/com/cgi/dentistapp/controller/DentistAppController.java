@@ -1,6 +1,7 @@
 package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @Autowired
     private DentistService dentistService;
 
+    @Autowired
+    private AvailableDateTimeService availableDateTimeService;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/results").setViewName("results");
@@ -33,6 +37,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @GetMapping("/")
     public String showRegisterForm(DentistVisitDTO dentistVisitDTO, Model model) {
         model.addAttribute("dentists", this.dentistService.getAllDentists());
+        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
         return "form";
     }
 
