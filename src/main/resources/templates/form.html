@@ -5,13 +5,10 @@
         <tr>
             <td><p th:text="#{dentist.name}">dentist.name</p></td>
             <td>
-                <input list="dentistNames" th:field="*{dentistName}"/>
-                <datalist id="dentistNames">
-                    <option value="Mr Smith"/>
-                    <option value="Candy Man"/>
-                    <option value="Large Drill"/>
-                    <option value="Cute Hedgehog"/>
-                </datalist>
+                <select th:field="*{dentistName}">
+                    <option th:each="dentist: ${dentists}" th:value="${dentist.getFullName()}" th:text="${dentist.getFullName()}">
+                    </option>
+                </select>
             </td>
             <td th:if="${#fields.hasErrors('dentistName')}" th:errors="*{dentistName}">name.error</td>
         </tr>
