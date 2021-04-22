@@ -13,13 +13,19 @@ public class DentistVisitDTO {
 
     @NotNull
     @DateTimeFormat(pattern = "dd.MM.yyyy")
+    Date visitDate;
+
+    @NotNull
+    @DateTimeFormat(pattern = "HH:mm")
     Date visitTime;
+
 
     public DentistVisitDTO() {
     }
 
-    public DentistVisitDTO(String dentistName, Date visitTime) {
+    public DentistVisitDTO(String dentistName, Date visitDate, Date visitTime) {
         this.dentistName = dentistName;
+        this.visitDate = visitDate;
         this.visitTime = visitTime;
     }
 
@@ -29,6 +35,14 @@ public class DentistVisitDTO {
 
     public void setDentistName(String dentistName) {
         this.dentistName = dentistName;
+    }
+
+    public Date getVisitDate() {
+        return visitDate;
+    }
+
+    public void setVisitDate(Date visitDate) {
+        this.visitDate = visitDate;
     }
 
     public Date getVisitTime() {

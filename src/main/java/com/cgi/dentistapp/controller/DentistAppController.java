@@ -1,6 +1,7 @@
 package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
@@ -38,6 +40,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     public String showRegisterForm(DentistVisitDTO dentistVisitDTO, Model model) {
         model.addAttribute("dentists", this.dentistService.getAllDentists());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
+        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
         return "form";
     }
 
@@ -47,7 +50,11 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
             return "form";
         }
 
-        dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitTime());
+        dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitDate());
+        List<DentistVisitEntity> allVisits = dentistVisitService.getAllVisits();
+        for(DentistVisitEntity oneVisit : allVisits) {
+            System.out.println(oneVisit);
+        }
         return "redirect:/results";
     }
 }
