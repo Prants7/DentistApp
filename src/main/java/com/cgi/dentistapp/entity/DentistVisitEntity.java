@@ -10,13 +10,15 @@ public class DentistVisitEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String dentistName;
+    @ManyToOne
+    @JoinColumn(name="dentist_id", nullable = false)
+    private DentistEntity dentist;
     private String dateTime;
 
     public DentistVisitEntity() {}
 
-    public DentistVisitEntity(String dentistName, String dateTime) {
-        this.dentistName = dentistName;
+    public DentistVisitEntity(DentistEntity dentist, String dateTime) {
+        this.dentist = dentist;
         this.dateTime = dateTime;
     }
 
@@ -24,8 +26,8 @@ public class DentistVisitEntity {
         return id;
     }
 
-    public String getDentistName() {
-        return dentistName;
+    public DentistEntity getDentist() {
+        return dentist;
     }
 
     public String getDateTime() {
@@ -36,8 +38,8 @@ public class DentistVisitEntity {
         this.id = id;
     }
 
-    public void setDentistName(String dentistName) {
-        this.dentistName = dentistName;
+    public void setDentistName(DentistEntity dentist) {
+        this.dentist = dentist;
     }
 
     public void setDateTime(String dateTime) {
@@ -45,6 +47,6 @@ public class DentistVisitEntity {
     }
 
     public String toString() {
-        return this.dentistName + " at: " + this.dateTime;
+        return this.dentist.getFullName() + " at: " + this.dateTime;
     }
 }

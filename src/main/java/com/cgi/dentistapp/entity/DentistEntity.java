@@ -12,6 +12,8 @@ public class DentistEntity {
     private String firstName;
     private String lastName;
 
+    public DentistEntity() {}
+
     public DentistEntity(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
