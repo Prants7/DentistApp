@@ -50,7 +50,8 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
             return "form";
         }
 
-        dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitDate());
+        //dentistVisitService.addVisit(dentistVisitDTO.getDentistName(), dentistVisitDTO.getVisitDate());
+        dentistVisitService.addVisit(dentistVisitDTO);
         List<DentistVisitEntity> allVisits = dentistVisitService.getAllVisits();
         for(DentistVisitEntity oneVisit : allVisits) {
             System.out.println(oneVisit);
