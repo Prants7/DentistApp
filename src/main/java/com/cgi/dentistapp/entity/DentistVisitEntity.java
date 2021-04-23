@@ -17,6 +17,10 @@ public class DentistVisitEntity {
 
     public DentistVisitEntity() {}
 
+    public DentistVisitEntity(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
     public DentistVisitEntity(DentistEntity dentist, String dateTime) {
         this.dentist = dentist;
         this.dateTime = dateTime;

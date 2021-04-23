@@ -1,30 +1,21 @@
-package com.cgi.dentistapp.entity;
+package com.cgi.dentistapp.dto;
 
-import javax.persistence.*;
+public class DentistDTO {
 
-@Entity
-@Table(name = "dentist")
-public class DentistEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String firstName;
     private String lastName;
 
-    public DentistEntity() {}
+    public DentistDTO() {}
 
-    public DentistEntity(String firstName, String lastName) {
+    public DentistDTO(Long id, String firstName, String lastName) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -35,12 +26,20 @@ public class DentistEntity {
         return lastName;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean hasId() {
+        return this.id != null;
     }
 
     public String getFullName() {

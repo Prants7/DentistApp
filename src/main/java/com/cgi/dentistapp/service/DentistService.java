@@ -1,6 +1,8 @@
 package com.cgi.dentistapp.service;
 
+import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.entity.DentistEntity;
+import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +18,30 @@ public class DentistService {
 
     private List<DentistEntity> allDentists;
 
-    public List<DentistEntity> getAllDentists() {
+    public List<DentistDTO> getAllDentists() {
+        return entityToDtoList(this.getAllDentistsEntities());
+    }
+
+    private List<DentistEntity> getAllDentistsEntities() {
         if(this.allDentists == null) {
             this.setUpDummyData();
         }
         return this.dentistRepository.findAll();
     }
 
-    public DentistEntity findDentistByName(String firstName, String lastName) {
+    public DentistDTO findDentistByName(String firstName, String lastName) {
+        return this.entityToDTO(findDentistByNameEntity(firstName, lastName));
+    }
+
+    public Long getIdOfDentistByName(String fullName) {
+        DentistDTO foundDentist = this.findDentistByName(fullName);
+        if(foundDentist == null) {
+            return null;
+        }
+        return foundDentist.getId();
+    }
+
+    private DentistEntity findDentistByNameEntity(String firstName, String lastName) {
         List<DentistEntity> foundDentists = this.dentistRepository.findByFirstNameAndLastName(firstName, lastName);
         if(foundDentists.isEmpty()) {
             return null;
@@ -31,7 +49,15 @@ public class DentistService {
         return foundDentists.get(0);
     }
 
-    public DentistEntity findDentistByName(String fullName) {
+    public DentistVisitEntity addDentistEntityToVisitEntity(DentistVisitEntity entityToChange, Long dentistId) {
+        DentistEntity foundEntity = this.dentistRepository.findOne(dentistId);
+        if(foundEntity != null) {
+            entityToChange.setDentistName(foundEntity);
+        }
+        return entityToChange;
+    }
+
+    public DentistDTO findDentistByName(String fullName) {
         String[] nameParts = fullName.split(" ");
         return findDentistByName(nameParts[0], nameParts[1]);
     }
@@ -55,6 +81,11 @@ public class DentistService {
         }
     }
 
+    public void addDentistToDataBase(DentistDTO newDentist) {
+        this.dentistRepository.save(this.DTOToEntity(newDentist));
+    }
+
+
     private void initDummyDataList() {
         this.allDentists = new ArrayList<>();
     }
@@ -66,4 +97,24 @@ public class DentistService {
         }
         System.out.println("finished with printing");
     }*/
+
+    private List<DentistDTO> entityToDtoList(List<DentistEntity> listOfElements) {
+        List<DentistDTO> finalList = new ArrayList<>();
+        for(DentistEntity oneEntity : listOfElements) {
+            finalList.add(entityToDTO(oneEntity));
+        }
+        return finalList;
+    }
+
+    private DentistDTO entityToDTO(DentistEntity element) {
+        return new DentistDTO(element.getId(), element.getFirstName(), element.getLastName());
+    }
+
+    private DentistEntity DTOToEntity(DentistDTO elementDTO) {
+        DentistEntity finalEntity = new DentistEntity(elementDTO.getFirstName(), elementDTO.getLastName());
+        if(elementDTO.hasId()) {
+            finalEntity.setId(elementDTO.getId());
+        }
+        return new DentistEntity();
+    }
 }

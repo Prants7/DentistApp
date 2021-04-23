@@ -31,6 +31,8 @@ public class DentistVisitService {
     }
 
     private DentistVisitEntity makeNewDentistVisitEntity(String dentistName, Date visitTime) {
-        return new DentistVisitEntity(this.dentistService.findDentistByName(dentistName), visitTime.toString());
+        DentistVisitEntity resultEntity = new DentistVisitEntity(visitTime.toString());
+        resultEntity = this.dentistService.addDentistEntityToVisitEntity(resultEntity, this.dentistService.getIdOfDentistByName(dentistName));
+        return resultEntity;
     }
 }
