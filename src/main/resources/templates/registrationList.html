@@ -1,13 +1,15 @@
 <html>
 <body>
     <div th:replace="fragments/navbar :: navigation"> </div>
+    <h2 th:text="#{registrationList.header}">registrationList.header</h2>
     <table>
         <tr>
-            <td>
-                <p th:text="#{registrationList.header}">registrationList.header</p>
-
-            </td>
+            <td th:text="#{registrationList.header.id}"> registrationList.header.id </td>
+            <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
+            <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
+            <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
         </tr>
+
         <tr th:each="oneRegistration: ${registrations}">
             <td th:text="${oneRegistration.id}" />
             <td th:text="${oneRegistration.dentistName}" />
