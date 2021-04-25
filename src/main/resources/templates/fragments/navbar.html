@@ -1,8 +1,15 @@
 <html>
 <body>
     <div th:fragment="navigation">
-        <a th:href="@{/}">registration</a>
-        <a th:href="@{/registrationList}">list</a>
+        <p th:text="#{navigation.title}"> navigation.title</p>
+        <ul>
+            <li>
+                <a th:href="@{/}" th:text="#{navigation.registration}">navigation.registration</a>
+            </li>
+            <li>
+                <a th:href="@{/registrationList}" th:text="#{navigation.list}">navigation.list</a>
+            </li>
+        </ul>
     </div>
 
 </body>
