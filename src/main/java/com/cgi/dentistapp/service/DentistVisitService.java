@@ -57,7 +57,7 @@ public class DentistVisitService {
             return null;
         }
         DentistVisitEntity resultEntity = new DentistVisitEntity(
-                new SimpleDateFormat("dd/MM/yyyy/HH:mm").format(DTOElement.getVisitDate())
+                DTOElement.getVisitDateString()+"/"+DTOElement.getVisitTimeString()
         );
         resultEntity = this.dentistService.addDentistEntityToVisitEntity(resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
         System.out.println("checking for id on DTO element");
@@ -84,8 +84,8 @@ public class DentistVisitService {
         try {
             DentistVisitDTO newDTO = new DentistVisitDTO(
                     elementEntity.getDentist().getFullName(),
-                    new SimpleDateFormat("dd/MM/yyyy/HH:mm").parse(elementEntity.getDateTime()),
-                    new SimpleDateFormat("dd/MM/yyyy/HH:mm").parse(elementEntity.getDateTime()));
+                    new SimpleDateFormat("dd.MM.yyyy/HH:mm").parse(elementEntity.getDateTime()),
+                    new SimpleDateFormat("dd.MM.yyyy/HH:mm").parse(elementEntity.getDateTime()));
             newDTO.setId(elementEntity.getId());
             return newDTO;
         }
