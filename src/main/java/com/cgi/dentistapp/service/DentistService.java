@@ -16,16 +16,16 @@ public class DentistService {
     @Autowired
     private DentistRepository dentistRepository;
 
-    private List<DentistEntity> allDentists;
+    //private List<DentistEntity> allDentists;
 
     public List<DentistDTO> getAllDentists() {
         return entityToDtoList(this.getAllDentistsEntities());
     }
 
     private List<DentistEntity> getAllDentistsEntities() {
-        if(this.allDentists == null) {
+        /*if(this.allDentists == null) {
             this.setUpDummyData();
-        }
+        }*/
         return this.dentistRepository.findAll();
     }
 
@@ -62,33 +62,33 @@ public class DentistService {
         return findDentistByName(nameParts[0], nameParts[1]);
     }
 
-    private void setUpDummyData() {
+    /*private void setUpDummyData() {
         this.initDummyDataList();
         this.makeDummyData();
         this.addDentistToDatabase(this.allDentists);
         //testFindAbility("Hedge", "Hog");
-    }
+    }*/
 
-    private void makeDummyData() {
+    /*private void makeDummyData() {
         this.allDentists.add(new DentistEntity("Hedge", "Hog"));
         this.allDentists.add(new DentistEntity("John", "Smith"));
         this.allDentists.add(new DentistEntity("Dummy", "Dentistsdata1"));
-    }
+    }*/
 
-    private void addDentistToDatabase(List<DentistEntity> elementsToAdd) {
+    /*private void addDentistToDatabase(List<DentistEntity> elementsToAdd) {
         for(DentistEntity oneDentist : elementsToAdd) {
             this.dentistRepository.save(oneDentist);
         }
-    }
+    }*/
 
     public void addDentistToDataBase(DentistDTO newDentist) {
         this.dentistRepository.save(this.DTOToEntity(newDentist));
     }
 
 
-    private void initDummyDataList() {
+    /*private void initDummyDataList() {
         this.allDentists = new ArrayList<>();
-    }
+    }*/
 
     /*private void testFindAbility(String firstName, String lastName) {
         System.out.println("Starting to printing out names");
