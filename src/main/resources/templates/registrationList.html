@@ -1,0 +1,17 @@
+<html>
+<body>
+    <table>
+        <tr>
+            <td>
+                <p th:text="#{registrationList.header}">registrationList.header</p>
+
+            </td>
+        </tr>
+        <tr th:each="oneRegistration: ${registrations}">
+            <td th:text="${oneRegistration.id}" />
+            <td th:text="${oneRegistration.dateTime}" />
+        </tr>
+
+    </table>
+</body>
+</html>

@@ -58,4 +58,10 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         }
         return "redirect:/results";
     }
+
+    @GetMapping("/registrationList")
+    public String showRegistrationList(Model model) {
+        model.addAttribute("registrations", this.dentistVisitService.getAllVisits());
+        return "registrationList";
+    }
 }
