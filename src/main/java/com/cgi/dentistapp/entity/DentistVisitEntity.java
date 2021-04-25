@@ -42,7 +42,7 @@ public class DentistVisitEntity {
         this.id = id;
     }
 
-    public void setDentistName(DentistEntity dentist) {
+    public void setDentistEntity(DentistEntity dentist) {
         this.dentist = dentist;
     }
 

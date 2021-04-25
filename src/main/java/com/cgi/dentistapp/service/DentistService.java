@@ -33,6 +33,10 @@ public class DentistService {
         return this.entityToDTO(findDentistByNameEntity(firstName, lastName));
     }
 
+    public String getNameOfDentist(Long id) {
+        return this.entityToDTO(this.dentistRepository.findOne(id)).getFullName();
+    }
+
     public Long getIdOfDentistByName(String fullName) {
         DentistDTO foundDentist = this.findDentistByName(fullName);
         if(foundDentist == null) {
@@ -52,7 +56,7 @@ public class DentistService {
     public DentistVisitEntity addDentistEntityToVisitEntity(DentistVisitEntity entityToChange, Long dentistId) {
         DentistEntity foundEntity = this.dentistRepository.findOne(dentistId);
         if(foundEntity != null) {
-            entityToChange.setDentistName(foundEntity);
+            entityToChange.setDentistEntity(foundEntity);
         }
         return entityToChange;
     }

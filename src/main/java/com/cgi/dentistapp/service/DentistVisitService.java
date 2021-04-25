@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +42,8 @@ public class DentistVisitService {
         }
     }
 
-    public List<DentistVisitEntity> getAllVisits() {
-        return dentistVisitRepository.findAll();
+    public List<DentistVisitDTO> getAllVisits() {
+        return this.entityToDTOList(dentistVisitRepository.findAll());
     }
 
     private DentistVisitEntity makeNewDentistVisitEntity(String dentistName, Date visitTime) {
@@ -54,9 +56,43 @@ public class DentistVisitService {
         if(!this.allowedToTurnIntoEntity(DTOElement)) {
             return null;
         }
-        DentistVisitEntity resultEntity = new DentistVisitEntity(DTOElement.getVisitDate().toString());
+        DentistVisitEntity resultEntity = new DentistVisitEntity(
+                new SimpleDateFormat("dd/MM/yyyy/HH:mm").format(DTOElement.getVisitDate())
+        );
         resultEntity = this.dentistService.addDentistEntityToVisitEntity(resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
+        System.out.println("checking for id on DTO element");
+        if(DTOElement.hasId()) {
+            System.out.println("Has id");
+            resultEntity.setId(DTOElement.getId());
+        }
         return resultEntity;
+    }
+
+    private List<DentistVisitDTO> entityToDTOList(List<DentistVisitEntity> elementEntityList) {
+        List<DentistVisitDTO> finalList = new ArrayList<>();
+        DentistVisitDTO oneDTO;
+        for(DentistVisitEntity oneEntity : elementEntityList) {
+            oneDTO = entityToDTO(oneEntity);
+            if(oneDTO != null) {
+                finalList.add(oneDTO);
+            }
+        }
+        return finalList;
+    }
+
+    private DentistVisitDTO entityToDTO(DentistVisitEntity elementEntity) {
+        try {
+            DentistVisitDTO newDTO = new DentistVisitDTO(
+                    elementEntity.getDentist().getFullName(),
+                    new SimpleDateFormat("dd/MM/yyyy/HH:mm").parse(elementEntity.getDateTime()),
+                    new SimpleDateFormat("dd/MM/yyyy/HH:mm").parse(elementEntity.getDateTime()));
+            newDTO.setId(elementEntity.getId());
+            return newDTO;
+        }
+        catch(Exception exception) {
+            System.out.println(exception);
+        }
+        return null;
     }
 
     private boolean allowedToTurnIntoEntity(DentistVisitDTO elementToCheck) {
