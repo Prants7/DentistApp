@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DentistVisitDTO {
@@ -20,6 +21,9 @@ public class DentistVisitDTO {
     @NotNull
     @DateTimeFormat(pattern = "HH:mm")
     Date visitTime;
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 
     public DentistVisitDTO() {
@@ -43,12 +47,20 @@ public class DentistVisitDTO {
         return visitDate;
     }
 
+    public String getVisitDateString() {
+        return this.dateFormat.format(this.visitDate);
+    }
+
     public void setVisitDate(Date visitDate) {
         this.visitDate = visitDate;
     }
 
     public Date getVisitTime() {
         return visitTime;
+    }
+
+    public String getVisitTimeString() {
+        return this.timeFormat.format(this.visitTime);
     }
 
     public void setVisitTime(Date visitTime) {

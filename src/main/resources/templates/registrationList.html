@@ -11,8 +11,8 @@
         <tr th:each="oneRegistration: ${registrations}">
             <td th:text="${oneRegistration.id}" />
             <td th:text="${oneRegistration.dentistName}" />
-            <td th:text="${oneRegistration.visitDate}" />
-            <td th:text="${oneRegistration.visitTime}" />
+            <td th:text="${oneRegistration.getVisitDateString()}" />
+            <td th:text="${oneRegistration.getVisitTimeString()}" />
         </tr>
 
     </table>
