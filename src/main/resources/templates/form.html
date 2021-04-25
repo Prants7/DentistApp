@@ -1,7 +1,8 @@
 <html>
 <body>
-<script type="text/javascript" th:src="@{/js/testActions.js}"></script>
+<!--script type="text/javascript" th:src="@{/js/testActions.js}"></script-->
 <!--button type="button" th:onclick="showAlert()">Show Alert</button-->
+<div th:replace="fragments/navbar :: navigation"> </div>
 <form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" method="post">
     <table>
         <tr>
