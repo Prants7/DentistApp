@@ -109,4 +109,9 @@ public class DentistVisitService {
         }
         return null;
     }
+
+    public boolean deleteEntry(Long id) {
+        this.dentistVisitRepository.delete(id);
+        return true;
+    }
 }

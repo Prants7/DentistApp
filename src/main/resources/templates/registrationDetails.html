@@ -11,6 +11,7 @@
         <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
         <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
         <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
+        <td> delete </td>
     </tr>
 
     <tr>
@@ -18,6 +19,11 @@
         <td th:text="${selectedVisit.dentistName}" />
         <td th:text="${selectedVisit.getVisitDateString()}" />
         <td th:text="${selectedVisit.getVisitTimeString()}" />
+        <td>
+            <form th:action="@{/details/{id}/delete(id=${selectedVisit.id})}" method="POST">
+                <button type="submit">delete</button>
+            </form>
+        </td>
     </tr>
 
 </table>

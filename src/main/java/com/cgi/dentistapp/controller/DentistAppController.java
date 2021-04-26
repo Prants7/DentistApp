@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +68,15 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         }
         model.addAttribute("selectedVisit", foundVisit);
         return "registrationDetails";
+    }
+
+    @PostMapping("/details/{id}/delete")
+    public String deleteOneRegistrationPage(@PathVariable Long id, Model model) {
+        System.out.println("trying to delete");
+        DentistVisitDTO foundVisit = this.dentistVisitService.getVisitById(id);
+        if(foundVisit != null) {
+            this.dentistVisitService.deleteEntry(id);
+        }
+        return "redirect:/registrationList";
     }
 }
