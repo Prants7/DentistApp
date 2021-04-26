@@ -8,6 +8,7 @@
             <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
             <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
             <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
+            <td> details </td>
         </tr>
 
         <tr th:each="oneRegistration: ${registrations}">
@@ -15,6 +16,9 @@
             <td th:text="${oneRegistration.dentistName}" />
             <td th:text="${oneRegistration.getVisitDateString()}" />
             <td th:text="${oneRegistration.getVisitTimeString()}" />
+            <td>
+                <a th:href="@{/details/{id}(id = ${oneRegistration.id})}">details</a>
+            </td>
         </tr>
 
     </table>
