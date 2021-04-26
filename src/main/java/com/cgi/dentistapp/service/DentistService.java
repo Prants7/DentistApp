@@ -12,25 +12,15 @@ import java.util.List;
 
 @Service
 public class DentistService {
-
     @Autowired
     private DentistRepository dentistRepository;
-
-    //private List<DentistEntity> allDentists;
 
     public List<DentistDTO> getAllDentists() {
         return entityToDtoList(this.getAllDentistsEntities());
     }
 
     private List<DentistEntity> getAllDentistsEntities() {
-        /*if(this.allDentists == null) {
-            this.setUpDummyData();
-        }*/
         return this.dentistRepository.findAll();
-    }
-
-    public DentistDTO findDentistByName(String firstName, String lastName) {
-        return this.entityToDTO(findDentistByNameEntity(firstName, lastName));
     }
 
     public String getNameOfDentist(Long id) {
@@ -66,41 +56,13 @@ public class DentistService {
         return findDentistByName(nameParts[0], nameParts[1]);
     }
 
-    /*private void setUpDummyData() {
-        this.initDummyDataList();
-        this.makeDummyData();
-        this.addDentistToDatabase(this.allDentists);
-        //testFindAbility("Hedge", "Hog");
-    }*/
-
-    /*private void makeDummyData() {
-        this.allDentists.add(new DentistEntity("Hedge", "Hog"));
-        this.allDentists.add(new DentistEntity("John", "Smith"));
-        this.allDentists.add(new DentistEntity("Dummy", "Dentistsdata1"));
-    }*/
-
-    /*private void addDentistToDatabase(List<DentistEntity> elementsToAdd) {
-        for(DentistEntity oneDentist : elementsToAdd) {
-            this.dentistRepository.save(oneDentist);
-        }
-    }*/
+    public DentistDTO findDentistByName(String firstName, String lastName) {
+        return this.entityToDTO(findDentistByNameEntity(firstName, lastName));
+    }
 
     public void addDentistToDataBase(DentistDTO newDentist) {
         this.dentistRepository.save(this.DTOToEntity(newDentist));
     }
-
-
-    /*private void initDummyDataList() {
-        this.allDentists = new ArrayList<>();
-    }*/
-
-    /*private void testFindAbility(String firstName, String lastName) {
-        System.out.println("Starting to printing out names");
-        for(DentistEntity oneFoundEntity : this.dentistRepository.findByFirstNameAndLastName(firstName, lastName)) {
-            System.out.println(oneFoundEntity.getFullName());
-        }
-        System.out.println("finished with printing");
-    }*/
 
     private List<DentistDTO> entityToDtoList(List<DentistEntity> listOfElements) {
         List<DentistDTO> finalList = new ArrayList<>();

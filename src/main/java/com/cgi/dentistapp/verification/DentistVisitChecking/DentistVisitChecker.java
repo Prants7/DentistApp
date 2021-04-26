@@ -1,4 +1,4 @@
-package com.cgi.dentistapp.verification.DentistVisitVerification;
+package com.cgi.dentistapp.verification.DentistVisitChecking;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 

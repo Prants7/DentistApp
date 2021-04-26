@@ -3,7 +3,7 @@ package com.cgi.dentistapp.service;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistVisitRepository;
-import com.cgi.dentistapp.verification.DentistVisitVerification.DentistVisitChecker;
+import com.cgi.dentistapp.verification.DentistVisitChecking.DentistVisitChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,6 @@ import java.util.List;
 @Service
 @Transactional
 public class DentistVisitService {
-
     @Autowired
     private DentistVisitRepository dentistVisitRepository;
 
@@ -28,12 +27,7 @@ public class DentistVisitService {
     @Qualifier("VisitCheckerImpl")
     private DentistVisitChecker checker;
 
-    /*public void addVisit(String dentistName, Date visitTime) {
-        if(dentistService.findDentistByName(dentistName) == null) {
-            return;
-        }
-        this.dentistVisitRepository.save(this.makeNewDentistVisitEntity(dentistName, visitTime));
-    }*/
+    private SimpleDateFormat mergedDateFormatter = new SimpleDateFormat("dd.MM.yyyy/HH:mm");
 
     public void addVisit(DentistVisitDTO visitDTO) {
         DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
@@ -46,26 +40,26 @@ public class DentistVisitService {
         return this.entityToDTOList(dentistVisitRepository.findAll());
     }
 
-    private DentistVisitEntity makeNewDentistVisitEntity(String dentistName, Date visitTime) {
-        DentistVisitEntity resultEntity = new DentistVisitEntity(visitTime.toString());
-        resultEntity = this.dentistService.addDentistEntityToVisitEntity(resultEntity, this.dentistService.getIdOfDentistByName(dentistName));
-        return resultEntity;
-    }
-
     private DentistVisitEntity DTOToEntity(DentistVisitDTO DTOElement) {
         if(!this.allowedToTurnIntoEntity(DTOElement)) {
             return null;
         }
-        DentistVisitEntity resultEntity = new DentistVisitEntity(
-                DTOElement.getVisitDateString()+"/"+DTOElement.getVisitTimeString()
-        );
-        resultEntity = this.dentistService.addDentistEntityToVisitEntity(resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
-        System.out.println("checking for id on DTO element");
-        if(DTOElement.hasId()) {
-            System.out.println("Has id");
-            resultEntity.setId(DTOElement.getId());
-        }
+        DentistVisitEntity resultEntity = new DentistVisitEntity(formatMergeDTODateAndTime(DTOElement));
+        resultEntity = this.dentistService.addDentistEntityToVisitEntity(
+                resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
+        resultEntity = checkAndAddIdToEntity(DTOElement, resultEntity);
         return resultEntity;
+    }
+
+    private String formatMergeDTODateAndTime(DentistVisitDTO DTOElement) {
+        return DTOElement.getVisitDateString()+"/"+DTOElement.getVisitTimeString();
+    }
+
+    private DentistVisitEntity checkAndAddIdToEntity(DentistVisitDTO DTOElement, DentistVisitEntity entityToChange) {
+        if(DTOElement.hasId()) {
+            entityToChange.setId(DTOElement.getId());
+        }
+        return entityToChange;
     }
 
     private List<DentistVisitDTO> entityToDTOList(List<DentistVisitEntity> elementEntityList) {
@@ -81,18 +75,27 @@ public class DentistVisitService {
     }
 
     private DentistVisitDTO entityToDTO(DentistVisitEntity elementEntity) {
+        DentistVisitDTO newDTO = generateNewDTOWithoutID(elementEntity);
+        newDTO.setId(elementEntity.getId());
+        return newDTO;
+    }
+
+    private DentistVisitDTO generateNewDTOWithoutID(DentistVisitEntity elementEntity) {
+        Date newDate = attemptToExtractDateFromEntity(elementEntity);
+        DentistVisitDTO newDTO = new DentistVisitDTO(elementEntity.getDentist().getFullName(), newDate, newDate);
+        return newDTO;
+    }
+
+    private Date attemptToExtractDateFromEntity(DentistVisitEntity elementEntity) {
+        //NB! if it corrupts it gives current moment
+        Date newDate = new Date();
         try {
-            DentistVisitDTO newDTO = new DentistVisitDTO(
-                    elementEntity.getDentist().getFullName(),
-                    new SimpleDateFormat("dd.MM.yyyy/HH:mm").parse(elementEntity.getDateTime()),
-                    new SimpleDateFormat("dd.MM.yyyy/HH:mm").parse(elementEntity.getDateTime()));
-            newDTO.setId(elementEntity.getId());
-            return newDTO;
+            newDate = mergedDateFormatter.parse(elementEntity.getDateTime());
         }
-        catch(Exception exception) {
+        catch (Exception exception) {
             System.out.println(exception);
         }
-        return null;
+        return newDate;
     }
 
     private boolean allowedToTurnIntoEntity(DentistVisitDTO elementToCheck) {
