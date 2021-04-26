@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Edit</title>
+</head>
+<body>
+<h2>edit page</h2>
+<form action="#" th:action="@{/details/{id}/edit (id=${selectedVisit.id})}" th:object="${dentistVisitDTO}" method="post">
+    <table>
+        <tr>
+            <td><p th:text="#{dentist.name}">dentist.name</p></td>
+            <td>
+                <select th:field="*{dentistName}">
+                    <option th:each="dentist: ${dentists}" th:value="${dentist.getFullName()}" th:text="${dentist.getFullName()}">
+                    </option>
+                </select>
+            </td>
+            <td th:if="${#fields.hasErrors('dentistName')}" th:errors="*{dentistName}">name.error</td>
+        </tr>
+        <tr>
+            <td><p th:text="#{visit.date}">visit.date</p></td>
+            <td>
+                <select th:field="*{visitDate}">
+                    <option th:each="visitDate: ${dates}" th:value="${visitDate.toString()}" th:text="${visitDate.toString()}">
+                    </option>
+                </select>
+            </td>
+            <td th:if="${#fields.hasErrors('visitDate')}" th:errors="*{visitDate}">date.error</td>
+        </tr>
+        <tr>
+            <td><p th:text="#{visit.time}">visit.time</p></td>
+            <td>
+                <select th:field="*{visitTime}">
+                    <option th:each="visitTime: ${times}" th:value="${visitTime.toString()}" th:text="${visitTime.toString()}">
+                    </option>
+                </select>
+            </td>
+            <td th:if="${#fields.hasErrors('visitTime')}" th:errors="*{visitTime}">time.error</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit" th:text="#{register.visit}"></button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

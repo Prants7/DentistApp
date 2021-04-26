@@ -36,6 +36,17 @@ public class DentistVisitService {
         }
     }
 
+    public void updateVisit(DentistVisitDTO visitDTO) {
+        DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
+        if(entityAttempt == null) {
+            return;
+        }
+        if(entityAttempt.getId() == null) {
+            return;
+        }
+        this.dentistVisitRepository.save(entityAttempt);
+    }
+
     public List<DentistVisitDTO> getAllVisits() {
         return this.entityToDTOList(dentistVisitRepository.findAll());
     }
