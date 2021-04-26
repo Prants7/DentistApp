@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Details</title>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navigation"> </div>
+<h2>details page</h2>
+<table>
+    <tr>
+        <td th:text="#{registrationList.header.id}"> registrationList.header.id </td>
+        <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
+        <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
+        <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
+    </tr>
+
+    <tr>
+        <td th:text="${selectedVisit.id}" />
+        <td th:text="${selectedVisit.dentistName}" />
+        <td th:text="${selectedVisit.getVisitDateString()}" />
+        <td th:text="${selectedVisit.getVisitTimeString()}" />
+    </tr>
+
+</table>
+</body>
+</html>

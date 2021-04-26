@@ -101,4 +101,12 @@ public class DentistVisitService {
     private boolean allowedToTurnIntoEntity(DentistVisitDTO elementToCheck) {
         return checker.DTOVerification(elementToCheck);
     }
+
+    public DentistVisitDTO getVisitById(Long id) {
+        DentistVisitEntity foundEntity = this.dentistVisitRepository.findOne(id);
+        if(foundEntity != null) {
+            return this.entityToDTO(foundEntity);
+        }
+        return null;
+    }
 }
