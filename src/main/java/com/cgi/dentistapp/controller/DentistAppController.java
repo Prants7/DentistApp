@@ -4,6 +4,7 @@ import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
+import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.DentistVisitRegisterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/results").setViewName("results");
+        registry.addViewController("/timeUnavailable").setViewName("unavailableTime");
     }
 
     @GetMapping("/")
@@ -48,9 +50,16 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         if (bindingResult.hasErrors()) {
             return "form";
         }
-        dentistVisitService.addVisit(dentistVisitDTO);
-
+        try {
+            dentistVisitService.addVisit(dentistVisitDTO);
+        }
+        catch(DentistVisitRegisterException exception) {
+            return "redirect:/timeUnavailable";
+        }
         return "redirect:/results";
+        /*dentistVisitService.addVisit(dentistVisitDTO);
+
+        return "redirect:/results";*/
     }
 
     @GetMapping("/registrationList")

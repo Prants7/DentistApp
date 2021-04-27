@@ -4,6 +4,7 @@ import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistVisitRepository;
 import com.cgi.dentistapp.verification.DentistVisitChecking.DentistVisitChecker;
+import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.DentistVisitRegisterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,18 @@ public class DentistVisitService {
 
     private SimpleDateFormat mergedDateFormatter = new SimpleDateFormat("dd.MM.yyyy/HH:mm");
 
-    public void addVisit(DentistVisitDTO visitDTO) {
-        DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
-        if(entityAttempt != null) {
+    public void addVisit(DentistVisitDTO visitDTO) throws DentistVisitRegisterException {
+        try {
+            DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
             this.dentistVisitRepository.save(entityAttempt);
         }
+        catch (DentistVisitRegisterException exception) {
+            throw exception;
+        }
+        /*DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
+        if(entityAttempt != null) {
+            this.dentistVisitRepository.save(entityAttempt);
+        }*/
     }
 
     public void updateVisit(DentistVisitDTO visitDTO) {
@@ -51,10 +59,16 @@ public class DentistVisitService {
         return this.entityToDTOList(dentistVisitRepository.findAll());
     }
 
-    private DentistVisitEntity DTOToEntity(DentistVisitDTO DTOElement) {
-        if(!this.allowedToTurnIntoEntity(DTOElement)) {
-            return null;
+    private DentistVisitEntity DTOToEntity(DentistVisitDTO DTOElement) throws DentistVisitRegisterException {
+        try {
+            this.allowedToTurnIntoEntity(DTOElement);
         }
+        catch(DentistVisitRegisterException exception) {
+            throw exception;
+        }
+        /*if(!this.allowedToTurnIntoEntity(DTOElement)) {
+            return null;
+        }*/
         DentistVisitEntity resultEntity = new DentistVisitEntity(formatMergeDTODateAndTime(DTOElement));
         resultEntity = this.dentistService.addDentistEntityToVisitEntity(
                 resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
@@ -124,5 +138,19 @@ public class DentistVisitService {
     public boolean deleteEntry(Long id) {
         this.dentistVisitRepository.delete(id);
         return true;
+    }
+
+    private void debugTestTimeSearch(DentistVisitDTO testDTO) {
+        System.out.println("performing search for same time previous entries");
+        for(DentistVisitDTO oneFoundDTO : this.findVisitsWithSameTIme(testDTO)) {
+            System.out.println("found for: "+oneFoundDTO.getDentistName()+ " on "+oneFoundDTO.getVisitTimeString()+" / "+oneFoundDTO.getVisitDateString());
+        }
+        System.out.println("search over");
+    }
+
+    public List<DentistVisitDTO> findVisitsWithSameTIme(DentistVisitDTO visitDTO) {
+        String searchString = this.formatMergeDTODateAndTime(visitDTO);
+        List<DentistVisitEntity> foundEntities = this.dentistVisitRepository.findByDateTime(searchString);
+        return this.entityToDTOList(foundEntities);
     }
 }

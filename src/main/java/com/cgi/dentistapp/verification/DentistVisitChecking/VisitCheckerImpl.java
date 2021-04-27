@@ -1,13 +1,21 @@
 package com.cgi.dentistapp.verification.DentistVisitChecking;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.service.DentistVisitService;
+import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.DentistVisitRegisterException;
+import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.TimeTakenException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component("VisitCheckerImpl")
 public class VisitCheckerImpl implements DentistVisitChecker {
+    @Autowired
+    private DentistVisitService dentistVisitService;
 
     @Override
-    public boolean DTOVerification(DentistVisitDTO targetDTO) {
+    public boolean DTOVerification(DentistVisitDTO targetDTO) throws DentistVisitRegisterException {
         if(!hasActualDentist(targetDTO)) {
             System.out.println("failed at dentist check");
             return false;
@@ -33,8 +41,12 @@ public class VisitCheckerImpl implements DentistVisitChecker {
         return true;
     }
 
-    private boolean hasAvailableDate(DentistVisitDTO targetDTO) {
-        //todo
+    private boolean hasAvailableDate(DentistVisitDTO targetDTO) throws TimeTakenException {
+        //throw new TimeTakenException("Testing the exception");
+        List<DentistVisitDTO> searchForTakenTime = this.dentistVisitService.findVisitsWithSameTIme(targetDTO);
+        if(!searchForTakenTime.isEmpty()) {
+            throw new TimeTakenException("Testing the exception");
+        }
         return true;
     }
 }
