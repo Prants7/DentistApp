@@ -11,6 +11,10 @@
             <td> details </td>
         </tr>
 
+        <tr th:if="${registrations.empty}">
+            <td colspan="2"> No saved registrations </td>
+        </tr>
+
         <tr th:each="oneRegistration: ${registrations}">
             <td th:text="${oneRegistration.id}" />
             <td th:text="${oneRegistration.dentistName}" />
