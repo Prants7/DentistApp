@@ -4,6 +4,10 @@
 <!--button type="button" th:onclick="showAlert()">Show Alert</button-->
 <div th:replace="fragments/navbar :: navigation"> </div>
 <form action="#" th:action="@{/}" th:object="${dentistVisitDTO}" method="post">
+    <div th:if="${#fields.hasErrors('global')}">
+        <h3>Server side errors:</h3>
+        <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
+    </div>
     <table>
         <tr>
             <td><p th:text="#{dentist.name}">dentist.name</p></td>

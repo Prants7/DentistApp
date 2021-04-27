@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,27 +35,37 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/results").setViewName("results");
-        registry.addViewController("/timeUnavailable").setViewName("unavailableTime");
     }
 
     @GetMapping("/")
     public String showRegisterForm(DentistVisitDTO dentistVisitDTO, Model model) {
-        model.addAttribute("dentists", this.dentistService.getAllDentists());
+        /*model.addAttribute("dentists", this.dentistService.getAllDentists());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());*/
+        this.populateDentistVisitFormModel(model);
         return "form";
     }
 
+    private void populateDentistVisitFormModel(Model model) {
+        model.addAttribute("dentists", this.dentistService.getAllDentists());
+        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
+        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+    }
+
     @PostMapping("/")
-    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult) {
+    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            this.populateDentistVisitFormModel(model);
             return "form";
         }
         try {
             dentistVisitService.addVisit(dentistVisitDTO);
         }
         catch(DentistVisitRegisterException exception) {
-            return "redirect:/timeUnavailable";
+            ObjectError error = new ObjectError("globalError", exception.getMessage());
+            bindingResult.addError(error);
+            this.populateDentistVisitFormModel(model);
+            return "form";
         }
         return "redirect:/results";
         /*dentistVisitService.addVisit(dentistVisitDTO);
@@ -94,9 +105,10 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
             return "redirect:/registrationList";
         }
         model.addAttribute("selectedVisit", foundVisit);
-        model.addAttribute("dentists", this.dentistService.getAllDentists());
+        /*model.addAttribute("dentists", this.dentistService.getAllDentists());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());*/
+        this.populateDentistVisitFormModel(model);
         return "editForm";
     }
 
@@ -106,6 +118,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
             @Valid DentistVisitDTO dentistVisitDTO,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            this.populateDentistVisitFormModel(model);
             return "editForm";
         }
         dentistVisitDTO.setId(id);

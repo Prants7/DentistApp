@@ -45,7 +45,7 @@ public class VisitCheckerImpl implements DentistVisitChecker {
         //throw new TimeTakenException("Testing the exception");
         List<DentistVisitDTO> searchForTakenTime = this.dentistVisitService.findVisitsWithSameTIme(targetDTO);
         if(!searchForTakenTime.isEmpty()) {
-            throw new TimeTakenException("Testing the exception");
+            throw new TimeTakenException("Selected time has already been taken");
         }
         return true;
     }
