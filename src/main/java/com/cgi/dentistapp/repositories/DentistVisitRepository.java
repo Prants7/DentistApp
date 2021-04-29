@@ -15,4 +15,6 @@ public interface DentistVisitRepository extends JpaRepository<DentistVisitEntity
     List<DentistVisitEntity> findByDentist_id(long dentistId);
 
     List<DentistVisitEntity> findByDentistNameContains(String name);
+
+    List<DentistVisitEntity> findByDateTimeContains(String dateTime);
 }

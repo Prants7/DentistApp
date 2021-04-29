@@ -86,9 +86,13 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
 
     @GetMapping("/registrationList/search/{searchString}")
     public String searchForFirstNameDentists(@PathVariable String searchString, SearchForm searchForm, Model model) {
-        List<DentistVisitDTO> foundVisits = this.dentistVisitService.findByDentistFirstNameContains(searchString);
+        List<DentistVisitDTO> foundNameVisits = this.dentistVisitService.findByDentistFirstNameContains(searchString);
+        List<DentistVisitDTO> foundDateVisits = this.dentistVisitService.findByDateTimeContains(searchString);
+        if(!foundDateVisits.isEmpty()) {
+            foundNameVisits.addAll(foundDateVisits);
+        }
         model.addAttribute("search", searchString);
-        model.addAttribute("registrations", foundVisits);
+        model.addAttribute("registrations", foundNameVisits);
         return "registrationList";
     }
 

@@ -161,4 +161,8 @@ public class DentistVisitService {
     public List<DentistVisitDTO> findByDentistFirstNameContains(String firstNamePart) {
         return this.entityToDTOList(this.dentistVisitRepository.findByDentistNameContains(firstNamePart));
     }
+
+    public List<DentistVisitDTO> findByDateTimeContains(String dateTimePart) {
+        return this.entityToDTOList(this.dentistVisitRepository.findByDateTimeContains(dateTimePart));
+    }
 }
