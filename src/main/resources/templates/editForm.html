@@ -10,7 +10,7 @@
             <td><p th:text="#{dentist.name}">dentist.name</p></td>
             <td>
                 <select th:field="*{dentistName}">
-                    <option th:each="dentist: ${dentists}" th:value="${dentist.getFullName()}" th:text="${dentist.getFullName()}">
+                    <option th:each="dentist: ${dentists}" th:value="${dentist.getName()}" th:text="${dentist.getName()}">
                     </option>
                 </select>
             </td>

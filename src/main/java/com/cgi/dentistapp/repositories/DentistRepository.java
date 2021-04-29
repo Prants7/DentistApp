@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface DentistRepository extends JpaRepository<DentistEntity, Long> {
 
-    List<DentistEntity> findByFirstNameAndLastName(String firstName, String lastName);
+    List<DentistEntity> findByName(String name);
 }

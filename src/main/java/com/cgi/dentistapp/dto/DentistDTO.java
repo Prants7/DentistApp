@@ -3,46 +3,32 @@ package com.cgi.dentistapp.dto;
 public class DentistDTO {
 
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
 
     public DentistDTO() {}
 
-    public DentistDTO(Long id, String firstName, String lastName) {
+    public DentistDTO(Long id, String name) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public boolean hasId() {
         return this.id != null;
     }
 
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

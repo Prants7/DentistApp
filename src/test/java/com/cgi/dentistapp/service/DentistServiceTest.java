@@ -15,14 +15,14 @@ public class DentistServiceTest extends TestCase {
     @Autowired
     private DentistService dentistService;
 
-    private DentistDTO getTestableDentistDTO(String firstName, String lastName) {
+    /*private DentistDTO getTestableDentistDTO(String firstName, String lastName) {
         DentistDTO newDTO = new DentistDTO();
         newDTO.setFirstName(firstName);
         newDTO.setLastName(lastName);
         return newDTO;
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void serviceCanAddAndReturnADentistDTO() {
         String firstName = "Bill";
         String lastName = "Forest";
@@ -31,6 +31,6 @@ public class DentistServiceTest extends TestCase {
         DentistDTO DTOAfterSaving = this.dentistService.findDentistByName(firstName, lastName);
         assertEquals("Returned DTO should have right first name", firstName, DTOAfterSaving.getFirstName());
         assertEquals("Returned DTO should have right last name", lastName, DTOAfterSaving.getLastName());
-    }
+    }*/
 
 }

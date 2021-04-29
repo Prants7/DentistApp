@@ -51,6 +51,6 @@ public class DentistVisitEntity {
     }
 
     public String toString() {
-        return this.dentist.getFullName() + " at: " + this.dateTime;
+        return this.dentist.getName() + " at: " + this.dateTime;
     }
 }

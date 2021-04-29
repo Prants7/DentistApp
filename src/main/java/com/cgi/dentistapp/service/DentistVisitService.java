@@ -1,8 +1,6 @@
 package com.cgi.dentistapp.service;
 
-import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
-import com.cgi.dentistapp.entity.DentistEntity;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistVisitRepository;
 import com.cgi.dentistapp.verification.DentistVisitChecking.DentistVisitChecker;
@@ -109,7 +107,7 @@ public class DentistVisitService {
 
     private DentistVisitDTO generateNewDTOWithoutID(DentistVisitEntity elementEntity) {
         Date newDate = attemptToExtractDateFromEntity(elementEntity);
-        DentistVisitDTO newDTO = new DentistVisitDTO(elementEntity.getDentist().getFullName(), newDate, newDate);
+        DentistVisitDTO newDTO = new DentistVisitDTO(elementEntity.getDentist().getName(), newDate, newDate);
         return newDTO;
     }
 
@@ -161,6 +159,6 @@ public class DentistVisitService {
     }
 
     public List<DentistVisitDTO> findByDentistFirstNameContains(String firstNamePart) {
-        return this.entityToDTOList(this.dentistVisitRepository.findByDentistFirstNameContains(firstNamePart));
+        return this.entityToDTOList(this.dentistVisitRepository.findByDentistNameContains(firstNamePart));
     }
 }

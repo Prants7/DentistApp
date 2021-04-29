@@ -9,14 +9,16 @@ public class DentistEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstName;
-    private String lastName;
+    private String name;
 
     public DentistEntity() {}
 
     public DentistEntity(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = firstName + " " + lastName;
+    }
+
+    public DentistEntity(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -27,23 +29,11 @@ public class DentistEntity {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return this.name;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

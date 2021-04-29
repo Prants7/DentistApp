@@ -24,7 +24,7 @@ public class DentistService {
     }
 
     public String getNameOfDentist(Long id) {
-        return this.entityToDTO(this.dentistRepository.findOne(id)).getFullName();
+        return this.entityToDTO(this.dentistRepository.findOne(id)).getName();
     }
 
     public Long getIdOfDentistByName(String fullName) {
@@ -35,8 +35,8 @@ public class DentistService {
         return foundDentist.getId();
     }
 
-    private DentistEntity findDentistByNameEntity(String firstName, String lastName) {
-        List<DentistEntity> foundDentists = this.dentistRepository.findByFirstNameAndLastName(firstName, lastName);
+    private DentistEntity findDentistByNameEntity(String name) {
+        List<DentistEntity> foundDentists = this.dentistRepository.findByName(name);
         if(foundDentists.isEmpty()) {
             return null;
         }
@@ -51,13 +51,8 @@ public class DentistService {
         return entityToChange;
     }
 
-    public DentistDTO findDentistByName(String fullName) {
-        String[] nameParts = fullName.split(" ");
-        return findDentistByName(nameParts[0], nameParts[1]);
-    }
-
-    public DentistDTO findDentistByName(String firstName, String lastName) {
-        return this.entityToDTO(findDentistByNameEntity(firstName, lastName));
+    public DentistDTO findDentistByName(String name) {
+        return this.entityToDTO(findDentistByNameEntity(name));
     }
 
     public void addDentistToDataBase(DentistDTO newDentist) {
@@ -73,11 +68,11 @@ public class DentistService {
     }
 
     private DentistDTO entityToDTO(DentistEntity element) {
-        return new DentistDTO(element.getId(), element.getFirstName(), element.getLastName());
+        return new DentistDTO(element.getId(), element.getName());
     }
 
     private DentistEntity DTOToEntity(DentistDTO elementDTO) {
-        DentistEntity finalEntity = new DentistEntity(elementDTO.getFirstName(), elementDTO.getLastName());
+        DentistEntity finalEntity = new DentistEntity(elementDTO.getName());
         if(elementDTO.hasId()) {
             finalEntity.setId(elementDTO.getId());
         }

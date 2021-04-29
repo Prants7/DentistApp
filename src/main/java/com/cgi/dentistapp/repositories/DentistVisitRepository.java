@@ -14,5 +14,5 @@ public interface DentistVisitRepository extends JpaRepository<DentistVisitEntity
 
     List<DentistVisitEntity> findByDentist_id(long dentistId);
 
-    List<DentistVisitEntity> findByDentistFirstNameContains(String firstName);
+    List<DentistVisitEntity> findByDentistNameContains(String name);
 }
