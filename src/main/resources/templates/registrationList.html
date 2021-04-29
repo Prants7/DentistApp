@@ -1,7 +1,15 @@
 <html>
 <body>
     <div th:replace="fragments/navbar :: navigation"> </div>
-    <h2 th:text="#{registrationList.header}">registrationList.header</h2>
+    <div th:replace="fragments/searchBox :: search"> </div>
+
+    <tr th:if="${search == null}">
+        <h2 th:text="#{registrationList.header}">registrationList.header</h2>
+    </tr>
+    <tr th:unless="${search == null}">
+        <h2>Search results</h2>
+    </tr>
+
     <table>
         <tr>
             <td th:text="#{registrationList.header.id}"> registrationList.header.id </td>
@@ -12,7 +20,7 @@
         </tr>
 
         <tr th:if="${registrations.empty}">
-            <td colspan="2"> No saved registrations </td>
+            <td colspan="2"> No found registrations </td>
         </tr>
 
         <tr th:each="oneRegistration: ${registrations}">

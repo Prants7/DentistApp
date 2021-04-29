@@ -2,6 +2,7 @@ package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.form.SearchForm;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
@@ -76,7 +77,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @GetMapping("/registrationList")
-    public String showRegistrationList(Model model) {
+    public String showRegistrationList(SearchForm searchForm, Model model) {
         model.addAttribute("registrations", this.dentistVisitService.getAllVisits());
         //performDebugSearchForFirstName("D");
         //performDebugSearchForFirstNameOnVisit("D");
@@ -84,11 +85,24 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     }
 
     @GetMapping("/registrationList/search/{searchString}")
-    public String searchForFirstNameDentists(@PathVariable String searchString, Model model) {
+    public String searchForFirstNameDentists(@PathVariable String searchString, SearchForm searchForm, Model model) {
         List<DentistVisitDTO> foundVisits = this.dentistVisitService.findByDentistFirstNameContains(searchString);
         model.addAttribute("search", searchString);
         model.addAttribute("registrations", foundVisits);
         return "registrationList";
+    }
+
+    @PostMapping("/registrationList/search")
+    public String searchForElement(@Valid SearchForm searchForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/registrationList";
+        }
+        return "redirect:/registrationList/search/"+searchForm.getDentistNameSearch();
+    }
+
+    @GetMapping("/registrationList/search")
+    public String getSearchPage(SearchForm searchForm) {
+        return "fragments/searchBox";
     }
 
     @GetMapping("/details/{id}")
