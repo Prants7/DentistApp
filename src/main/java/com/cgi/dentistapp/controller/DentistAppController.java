@@ -1,5 +1,6 @@
 package com.cgi.dentistapp.controller;
 
+import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
@@ -76,6 +78,16 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
     @GetMapping("/registrationList")
     public String showRegistrationList(Model model) {
         model.addAttribute("registrations", this.dentistVisitService.getAllVisits());
+        //performDebugSearchForFirstName("D");
+        //performDebugSearchForFirstNameOnVisit("D");
+        return "registrationList";
+    }
+
+    @GetMapping("/registrationList/search/{searchString}")
+    public String searchForFirstNameDentists(@PathVariable String searchString, Model model) {
+        List<DentistVisitDTO> foundVisits = this.dentistVisitService.findByDentistFirstNameContains(searchString);
+        model.addAttribute("search", searchString);
+        model.addAttribute("registrations", foundVisits);
         return "registrationList";
     }
 

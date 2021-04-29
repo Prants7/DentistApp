@@ -1,6 +1,8 @@
 package com.cgi.dentistapp.service;
 
+import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.entity.DentistEntity;
 import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistVisitRepository;
 import com.cgi.dentistapp.verification.DentistVisitChecking.DentistVisitChecker;
@@ -152,5 +154,13 @@ public class DentistVisitService {
         String searchString = this.formatMergeDTODateAndTime(visitDTO);
         List<DentistVisitEntity> foundEntities = this.dentistVisitRepository.findByDateTime(searchString);
         return this.entityToDTOList(foundEntities);
+    }
+
+    public List<DentistVisitDTO> findVisitsForDentist(Long dentistId) {
+        return this.entityToDTOList(this.dentistVisitRepository.findByDentist_id(dentistId));
+    }
+
+    public List<DentistVisitDTO> findByDentistFirstNameContains(String firstNamePart) {
+        return this.entityToDTOList(this.dentistVisitRepository.findByDentistFirstNameContains(firstNamePart));
     }
 }
