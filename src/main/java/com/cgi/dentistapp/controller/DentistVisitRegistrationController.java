@@ -24,7 +24,7 @@ import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
-public class DentistAppController extends WebMvcConfigurerAdapter {
+public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter {
     @Autowired
     private DentistVisitService dentistVisitService;
     @Autowired
