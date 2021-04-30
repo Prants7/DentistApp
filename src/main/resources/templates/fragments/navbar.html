@@ -4,7 +4,10 @@
         <p th:text="#{navigation.title}"> navigation.title</p>
         <ul>
             <li>
-                <a th:href="@{/}" th:text="#{navigation.registration}">navigation.registration</a>
+                <a th:href="@{/}">home</a>
+            </li>
+            <li>
+                <a th:href="@{/registration}" th:text="#{navigation.registration}">navigation.registration</a>
             </li>
             <li>
                 <a th:href="@{/registrationList}" th:text="#{navigation.list}">navigation.list</a>

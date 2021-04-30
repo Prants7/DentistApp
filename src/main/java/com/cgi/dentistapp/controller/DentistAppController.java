@@ -40,7 +40,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         registry.addViewController("/results").setViewName("results");
     }
 
-    @GetMapping("/")
+    @GetMapping("/registration")
     public String showRegisterForm(DentistVisitDTO dentistVisitDTO, Model model) {
         /*model.addAttribute("dentists", this.dentistService.getAllDentists());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
@@ -55,7 +55,7 @@ public class DentistAppController extends WebMvcConfigurerAdapter {
         model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
     }
 
-    @PostMapping("/")
+    @PostMapping("/registration")
     public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             this.populateDentistVisitFormModel(model);
