@@ -26,21 +26,24 @@ public class RegistrationListController {
     @GetMapping("/registrationList")
     public String showRegistrationList(SearchForm searchForm, Model model) {
         model.addAttribute("registrations", this.dentistVisitService.getAllVisits());
-        //performDebugSearchForFirstName("D");
-        //performDebugSearchForFirstNameOnVisit("D");
         return "registrationList";
     }
 
     @GetMapping("/registrationList/search/{searchString}")
     public String searchForFirstNameDentists(@PathVariable String searchString, SearchForm searchForm, Model model) {
-        List<DentistVisitDTO> foundNameVisits = this.dentistVisitService.findByDentistFirstNameContains(searchString);
+        List<DentistVisitDTO> foundResults = prepareFullListOfSearchResults(searchString);
+        model.addAttribute("search", searchString);
+        model.addAttribute("registrations", foundResults);
+        return "registrationList";
+    }
+
+    private List<DentistVisitDTO> prepareFullListOfSearchResults(String searchString) {
+        List<DentistVisitDTO> foundNameVisits = this.dentistVisitService.findByDentistNameContains(searchString);
         List<DentistVisitDTO> foundDateVisits = this.dentistVisitService.findByDateTimeContains(searchString);
         if(!foundDateVisits.isEmpty()) {
             foundNameVisits.addAll(foundDateVisits);
         }
-        model.addAttribute("search", searchString);
-        model.addAttribute("registrations", foundNameVisits);
-        return "registrationList";
+        return foundNameVisits;
     }
 
     @PostMapping("/registrationList/search")

@@ -1,11 +1,7 @@
 package com.cgi.dentistapp.controller;
 
-import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
-import com.cgi.dentistapp.dto.VisitationDateDTO;
-import com.cgi.dentistapp.dto.VisitationTimeDTO;
 import com.cgi.dentistapp.form.DentistVisitForm;
-import com.cgi.dentistapp.form.SearchForm;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
@@ -17,13 +13,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
@@ -42,6 +36,10 @@ public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter 
 
     @GetMapping("/registration")
     public String showRegisterForm(DentistVisitForm visitForm, Model model) {
+        return prepareAndGiveFormPage(model);
+    }
+
+    private String prepareAndGiveFormPage(Model model) {
         this.populateDentistVisitFormModel(model);
         return "form";
     }
@@ -55,20 +53,23 @@ public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter 
     @PostMapping("/registration")
     public String postRegisterForm(@Valid DentistVisitForm dentistVisitForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            this.populateDentistVisitFormModel(model);
-            return "form";
+            return prepareAndGiveFormPage(model);
         }
         try {
             dentistVisitService.addVisit(new DentistVisitDTO(dentistVisitForm));
         }
         catch(DentistVisitRegisterException exception) {
-            ObjectError error = new ObjectError("globalError", exception.getMessage());
-            bindingResult.addError(error);
-            this.populateDentistVisitFormModel(model);
-            return "form";
+            addGlobalExceptionToPage(exception, bindingResult);
+            return prepareAndGiveFormPage(model);
         }
         return "redirect:/results";
     }
+
+    private void addGlobalExceptionToPage(Exception exception, BindingResult bindingResult) {
+        ObjectError error = new ObjectError("globalError", exception.getMessage());
+        bindingResult.addError(error);
+    }
+
 
 
 

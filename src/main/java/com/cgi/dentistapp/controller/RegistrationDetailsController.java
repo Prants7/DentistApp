@@ -52,8 +52,7 @@ public class RegistrationDetailsController {
         if(!addFoundVisitToModel(model, id)) {
             return "redirect:/registrationList";
         }
-        this.populateDentistVisitFormModel(model);
-        return "editForm";
+        return prepareAndReturnEditPage(model);
     }
 
     private boolean addFoundVisitToModel(Model model, Long id) {
@@ -65,6 +64,17 @@ public class RegistrationDetailsController {
         return true;
     }
 
+    private String prepareAndReturnEditPage(Model model) {
+        this.populateDentistVisitFormModel(model);
+        return "editForm";
+    }
+
+    private void populateDentistVisitFormModel(Model model) {
+        model.addAttribute("dentists", this.dentistService.getAllDentists());
+        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
+        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+    }
+
     @PostMapping("/details/{id}/edit")
     public String editOneRegistration(
             @PathVariable Long id,
@@ -74,29 +84,32 @@ public class RegistrationDetailsController {
             if(!addFoundVisitToModel(model, id)) {
                 return "redirect:/registrationList";
             }
-            this.populateDentistVisitFormModel(model);
-            return "editForm";
+            return prepareAndReturnEditPage(model);
         }
-        DentistVisitDTO visitDTO = new DentistVisitDTO(dentistVisitForm);
-        visitDTO.setId(id);
+        DentistVisitDTO visitDTO = prepareDTOFromFormAndId(dentistVisitForm, id);
         try {
             dentistVisitService.updateVisit(visitDTO);
         }
         catch(DentistVisitRegisterException exception) {
-            ObjectError error = new ObjectError("globalError", exception.getMessage());
-            bindingResult.addError(error);
+            addGlobalExceptionToPage(exception, bindingResult);
             if(!addFoundVisitToModel(model, id)) {
                 return "redirect:/registrationList";
             }
-            this.populateDentistVisitFormModel(model);
-            return "editForm";
+            return prepareAndReturnEditPage(model);
         }
         return "redirect:/details/"+id;
     }
 
-    private void populateDentistVisitFormModel(Model model) {
-        model.addAttribute("dentists", this.dentistService.getAllDentists());
-        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+    private DentistVisitDTO prepareDTOFromFormAndId(DentistVisitForm dentistVisitForm, Long id) {
+        DentistVisitDTO visitDTO = new DentistVisitDTO(dentistVisitForm);
+        visitDTO.setId(id);
+        return visitDTO;
     }
+
+    private void addGlobalExceptionToPage(Exception exception, BindingResult bindingResult) {
+        ObjectError error = new ObjectError("globalError", exception.getMessage());
+        bindingResult.addError(error);
+    }
+
+
 }

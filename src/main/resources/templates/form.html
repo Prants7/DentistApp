@@ -7,7 +7,7 @@
 <h2 th:text="#{registration.title}">registration.title</h2>
 <form action="#" th:action="@{/registration}" th:object="${dentistVisitForm}" method="post">
     <div th:if="${#fields.hasErrors('global')}">
-        <h3>Server side errors:</h3>
+        <h3 th:text="#{server.error}">server.error</h3>
         <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
     </div>
     <table th:replace="fragments/registrationForm :: registrationForm"></table>

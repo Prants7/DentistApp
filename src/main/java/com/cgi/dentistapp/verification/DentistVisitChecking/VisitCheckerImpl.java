@@ -11,8 +11,6 @@ import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Component("VisitCheckerImpl")
@@ -27,19 +25,15 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     @Override
     public boolean DTOVerification(DentistVisitDTO targetDTO) throws DentistVisitRegisterException {
         if(!hasActualDentist(targetDTO)) {
-            System.out.println("failed at dentist check");
             return false;
         }
         if(!hasAllowedDate(targetDTO)) {
-            System.out.println("failed at allowed date check");
             return false;
         }
         if(!hasAllowedTime(targetDTO)) {
-            System.out.println("failed at allowed time check");
             return false;
         }
         if(!hasAvailableDate(targetDTO)) {
-            System.out.println("failed at available date check");
             return false;
         }
         return true;
@@ -48,20 +42,28 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     private boolean hasActualDentist(DentistVisitDTO targetDTO) {
         DentistDTO attemptToFindDentist = this.dentistService.findDentistByName(targetDTO.getDentistName());
         if(attemptToFindDentist == null) {
-            throw new DentistNotFoundException("Cant find dentist with name "+targetDTO.getDentistName());
+            throw prepareNewDentistNotFoundException(targetDTO);
         }
         if(!attemptToFindDentist.getName().equals(targetDTO.getDentistName())) {
-            throw new DentistNotFoundException("Cant find dentist with name "+targetDTO.getDentistName());
+            throw prepareNewDentistNotFoundException(targetDTO);
         }
         return true;
+    }
+
+    private DentistNotFoundException prepareNewDentistNotFoundException(DentistVisitDTO problemSource) {
+        return new DentistNotFoundException("Cant find dentist with name "+problemSource.getDentistName());
     }
 
     private boolean hasAllowedDate(DentistVisitDTO targetDTO) {
         List<VisitationDateDTO> allowedDates = this.dateTimeService.getAllVisitationDates();
         if(!findMatchingDate(allowedDates, targetDTO.getVisitDateString())) {
-            throw new NotAllowedDateException("Date: "+targetDTO.getVisitDateString()+" is not allowed");
+            throw prepareNewDateNotAllowedException(targetDTO);
         }
         return true;
+    }
+
+    private NotAllowedDateException prepareNewDateNotAllowedException(DentistVisitDTO problemSource) {
+        return new NotAllowedDateException("Date: "+problemSource.getVisitDateString()+" is not allowed");
     }
 
     private boolean findMatchingDate(List<VisitationDateDTO> checkedList, String searchedDateAsString) {
@@ -77,9 +79,13 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     private boolean hasAllowedTime(DentistVisitDTO targetDTO) {
         List<VisitationTimeDTO> allowedTimes = this.dateTimeService.getAllVisitationTimes();
         if(!findMatchingTime(allowedTimes, targetDTO.getVisitTimeString())) {
-            throw new NotAllowedTimeException("Time: "+targetDTO.getVisitTimeString()+" is not allowed");
+            throw prepareNewDTimeNotAllowedException(targetDTO);
         }
         return true;
+    }
+
+    private NotAllowedTimeException prepareNewDTimeNotAllowedException(DentistVisitDTO problemSource) {
+        return new NotAllowedTimeException("Time: "+problemSource.getVisitDateString()+" is not allowed");
     }
 
     private boolean findMatchingTime(List<VisitationTimeDTO> checkedList, String searchedTimeAsString) {
@@ -92,27 +98,25 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     }
 
     private boolean hasAvailableDate(DentistVisitDTO targetDTO) throws TimeTakenException {
-        //throw new TimeTakenException("Testing the exception");
         List<DentistVisitDTO> searchForTakenTime = this.dentistVisitService.findVisitsWithSameTIme(targetDTO);
-        /*if(searchForTakenTime.size() > 1) {
-            throw new TimeTakenException("Selected time has already been taken");
-        }
-        if(targetDTO.hasId()) {
-            if(searchForTakenTime.get(0).getId() != targetDTO.getId()) {
-                throw new TimeTakenException("Selected time has already been taken");
-            }
-        }*/
         if(!searchForTakenTime.isEmpty()) {
             if(searchForTakenTime.size() > 1) {
-                throw new TimeTakenException("Selected time has already been taken");
+                throw prepareNewTimeTakenException(targetDTO);
             }
             if(!targetDTO.hasId()) {
-                throw new TimeTakenException("Selected time has already been taken");
+                throw prepareNewTimeTakenException(targetDTO);
             }
             if(targetDTO.getId() != searchForTakenTime.get(0).getId()) {
-                throw new TimeTakenException("Selected time has already been taken");
+                throw prepareNewTimeTakenException(targetDTO);
             }
         }
         return true;
+    }
+
+    private TimeTakenException prepareNewTimeTakenException(DentistVisitDTO problemSource) {
+        return new TimeTakenException("Selected time: "+
+                problemSource.getVisitDateString() + "/"+
+                problemSource.getVisitTimeString() +
+                " has already been taken.");
     }
 }

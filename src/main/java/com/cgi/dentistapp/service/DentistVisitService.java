@@ -38,10 +38,6 @@ public class DentistVisitService {
         catch (DentistVisitRegisterException exception) {
             throw exception;
         }
-        /*DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
-        if(entityAttempt != null) {
-            this.dentistVisitRepository.save(entityAttempt);
-        }*/
     }
 
     public void updateVisit(DentistVisitDTO visitDTO) {
@@ -73,9 +69,6 @@ public class DentistVisitService {
         catch(DentistVisitRegisterException exception) {
             throw exception;
         }
-        /*if(!this.allowedToTurnIntoEntity(DTOElement)) {
-            return null;
-        }*/
         DentistVisitEntity resultEntity = new DentistVisitEntity(formatMergeDTODateAndTime(DTOElement));
         resultEntity = this.dentistService.addDentistEntityToVisitEntity(
                 resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
@@ -147,25 +140,13 @@ public class DentistVisitService {
         return true;
     }
 
-    private void debugTestTimeSearch(DentistVisitDTO testDTO) {
-        System.out.println("performing search for same time previous entries");
-        for(DentistVisitDTO oneFoundDTO : this.findVisitsWithSameTIme(testDTO)) {
-            System.out.println("found for: "+oneFoundDTO.getDentistName()+ " on "+oneFoundDTO.getVisitTimeString()+" / "+oneFoundDTO.getVisitDateString());
-        }
-        System.out.println("search over");
-    }
-
     public List<DentistVisitDTO> findVisitsWithSameTIme(DentistVisitDTO visitDTO) {
         String searchString = this.formatMergeDTODateAndTime(visitDTO);
         List<DentistVisitEntity> foundEntities = this.dentistVisitRepository.findByDateTime(searchString);
         return this.entityToDTOList(foundEntities);
     }
 
-    public List<DentistVisitDTO> findVisitsForDentist(Long dentistId) {
-        return this.entityToDTOList(this.dentistVisitRepository.findByDentist_id(dentistId));
-    }
-
-    public List<DentistVisitDTO> findByDentistFirstNameContains(String firstNamePart) {
+    public List<DentistVisitDTO> findByDentistNameContains(String firstNamePart) {
         return this.entityToDTOList(this.dentistVisitRepository.findByDentistNameContains(firstNamePart));
     }
 
