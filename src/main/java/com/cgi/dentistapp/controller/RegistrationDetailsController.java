@@ -1,6 +1,7 @@
 package com.cgi.dentistapp.controller;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.form.DentistVisitForm;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
@@ -47,18 +48,10 @@ public class RegistrationDetailsController {
     }
 
     @GetMapping("/details/{id}/edit")
-    public String getEditOneRegistrationPage(@PathVariable Long id, DentistVisitDTO dentistVisitDTO, Model model) {
-        /*DentistVisitDTO foundVisit = this.dentistVisitService.getVisitById(id);
-        if(foundVisit == null) {
-            return "redirect:/registrationList";
-        }
-        model.addAttribute("selectedVisit", foundVisit);*/
+    public String getEditOneRegistrationPage(@PathVariable Long id, DentistVisitForm dentistVisitForm, Model model) {
         if(!addFoundVisitToModel(model, id)) {
             return "redirect:/registrationList";
         }
-        /*model.addAttribute("dentists", this.dentistService.getAllDentists());
-        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());*/
         this.populateDentistVisitFormModel(model);
         return "editForm";
     }
@@ -75,7 +68,7 @@ public class RegistrationDetailsController {
     @PostMapping("/details/{id}/edit")
     public String editOneRegistration(
             @PathVariable Long id,
-            @Valid DentistVisitDTO dentistVisitDTO,
+            @Valid DentistVisitForm dentistVisitForm,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             if(!addFoundVisitToModel(model, id)) {
@@ -84,9 +77,10 @@ public class RegistrationDetailsController {
             this.populateDentistVisitFormModel(model);
             return "editForm";
         }
-        dentistVisitDTO.setId(id);
+        DentistVisitDTO visitDTO = new DentistVisitDTO(dentistVisitForm);
+        visitDTO.setId(id);
         try {
-            dentistVisitService.updateVisit(dentistVisitDTO);
+            dentistVisitService.updateVisit(visitDTO);
         }
         catch(DentistVisitRegisterException exception) {
             ObjectError error = new ObjectError("globalError", exception.getMessage());

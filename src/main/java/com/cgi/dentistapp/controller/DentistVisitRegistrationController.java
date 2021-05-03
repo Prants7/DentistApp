@@ -4,6 +4,7 @@ import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.dto.VisitationDateDTO;
 import com.cgi.dentistapp.dto.VisitationTimeDTO;
+import com.cgi.dentistapp.form.DentistVisitForm;
 import com.cgi.dentistapp.form.SearchForm;
 import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
@@ -40,55 +41,25 @@ public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter 
     }
 
     @GetMapping("/registration")
-    public String showRegisterForm(DentistVisitDTO dentistVisitDTO, Model model) {
-        /*model.addAttribute("dentists", this.dentistService.getAllDentists());
-        model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());*/
+    public String showRegisterForm(DentistVisitForm visitForm, Model model) {
         this.populateDentistVisitFormModel(model);
         return "form";
     }
 
     private void populateDentistVisitFormModel(Model model) {
-        //model.addAttribute("dentists", this.getAListOfDentistWithAddedFake());
         model.addAttribute("dentists", this.dentistService.getAllDentists());
-        //model.addAttribute("dates", this.getListOfDatesWithAddedFake());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
-        //model.addAttribute("times", this.getListOfTimesWithAddedFake());
         model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
     }
 
-    private DentistDTO makeFakeDentist() {
-        DentistDTO newDentist = new DentistDTO();
-        newDentist.setName("Fake Dentist");
-        return newDentist;
-    }
-
-    private List<DentistDTO> getAListOfDentistWithAddedFake() {
-        List<DentistDTO> foundDentists = this.dentistService.getAllDentists();
-        foundDentists.add(this.makeFakeDentist());
-        return foundDentists;
-    }
-
-    private List<VisitationDateDTO> getListOfDatesWithAddedFake() {
-        List<VisitationDateDTO> foundDates = this.availableDateTimeService.getAllVisitationDates();
-        foundDates.add(new VisitationDateDTO(20,5, 2000));
-        return foundDates;
-    }
-
-    private List<VisitationTimeDTO> getListOfTimesWithAddedFake() {
-        List<VisitationTimeDTO> foundTimes = this.availableDateTimeService.getAllVisitationTimes();
-        foundTimes.add(new VisitationTimeDTO(20, 00));
-        return foundTimes;
-    }
-
     @PostMapping("/registration")
-    public String postRegisterForm(@Valid DentistVisitDTO dentistVisitDTO, BindingResult bindingResult, Model model) {
+    public String postRegisterForm(@Valid DentistVisitForm dentistVisitForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             this.populateDentistVisitFormModel(model);
             return "form";
         }
         try {
-            dentistVisitService.addVisit(dentistVisitDTO);
+            dentistVisitService.addVisit(new DentistVisitDTO(dentistVisitForm));
         }
         catch(DentistVisitRegisterException exception) {
             ObjectError error = new ObjectError("globalError", exception.getMessage());
@@ -97,9 +68,6 @@ public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter 
             return "form";
         }
         return "redirect:/results";
-        /*dentistVisitService.addVisit(dentistVisitDTO);
-
-        return "redirect:/results";*/
     }
 
 

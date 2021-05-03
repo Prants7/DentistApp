@@ -3,7 +3,7 @@
 <!--script type="text/javascript" th:src="@{/js/testActions.js}"></script-->
 <!--button type="button" th:onclick="showAlert()">Show Alert</button-->
 <div th:replace="fragments/navbar :: navigation"> </div>
-<form action="#" th:action="@{/registration}" th:object="${dentistVisitDTO}" method="post">
+<form action="#" th:action="@{/registration}" th:object="${dentistVisitForm}" method="post">
     <div th:if="${#fields.hasErrors('global')}">
         <h3>Server side errors:</h3>
         <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
