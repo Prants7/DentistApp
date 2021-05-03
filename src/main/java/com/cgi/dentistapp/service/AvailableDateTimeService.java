@@ -72,13 +72,17 @@ public class AvailableDateTimeService {
 
     private void setUpDummyTime() {
         this.initDummyTimeList();
-        this.makeDummyDataForTime();
+        this.makeStandardVisitationTimeSlots();
     }
 
-    private void makeDummyDataForTime() {
-        for(int i = 0; i < 5; i++) {
+    private void makeStandardVisitationTimeSlots() {
+        //from 8 to 12 visitation times
+        for(int i = 0; i < 4; i++) {
             this.visitationTimes.add(new VisitationTimeDTO(8+i, 0));
-            this.visitationTimes.add(new VisitationTimeDTO( 8+i, 30));
+        }
+        //from 13 to 15
+        for(int i = 0; i < 3; i++) {
+            this.visitationTimes.add(new VisitationTimeDTO(13+i, 0));
         }
     }
 
