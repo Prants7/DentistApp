@@ -3,6 +3,7 @@
     <title>Edit</title>
 </head>
 <body>
+<div th:replace="fragments/navbar :: navigation"> </div>
 <h2>edit page</h2>
 <form action="#" th:action="@{/details/{id}/edit (id=${selectedVisit.id})}" th:object="${dentistVisitDTO}" method="post">
     <table th:replace="fragments/registrationForm :: registrationForm"></table>
