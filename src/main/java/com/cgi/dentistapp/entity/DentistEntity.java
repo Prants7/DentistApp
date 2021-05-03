@@ -2,13 +2,15 @@ package com.cgi.dentistapp.entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity element for saving dentists
+ */
 @Entity
 @Table(name = "dentist")
 public class DentistEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
 
     public DentistEntity() {}

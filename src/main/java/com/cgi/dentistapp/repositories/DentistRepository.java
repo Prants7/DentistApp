@@ -6,8 +6,16 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository for Dentists
+ */
 @Repository
 public interface DentistRepository extends JpaRepository<DentistEntity, Long> {
 
+    /**
+     * For finding dentists by name
+     * @param name name of the dentists
+     * @return all entries that have input name
+     */
     List<DentistEntity> findByName(String name);
 }

@@ -2,15 +2,18 @@ package com.cgi.dentistapp.form;
 
 import javax.validation.constraints.Size;
 
+/**
+ * Form for making dentistVisit searches
+ */
 public class SearchForm {
     @Size(min = 1, max = 50)
-    String dentistNameSearch;
+    String searchString;
 
-    public String getDentistNameSearch() {
-        return dentistNameSearch;
+    public String getSearchString() {
+        return searchString;
     }
 
-    public void setDentistNameSearch(String dentistNameSearch) {
-        this.dentistNameSearch = dentistNameSearch;
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 }

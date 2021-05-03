@@ -1,10 +1,17 @@
 package com.cgi.dentistapp.dto;
 
+/**
+ * DTO class for visitationTime
+ */
 public class VisitationTimeDTO {
-
     private int hour;
     private int minute;
 
+    /**
+     * constructor
+     * @param hour hour
+     * @param minute minute
+     */
     public VisitationTimeDTO(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
@@ -18,10 +25,18 @@ public class VisitationTimeDTO {
         return minute;
     }
 
+    /**
+     * toString meethod
+     * @return time as string in form Hour:Minute
+     */
     public String toString() {
         return this.getHourString()+":"+this.getMinuteString();
     }
 
+    /**
+     * Returns hour as a double digit string
+     * @return string version of hour
+     */
     private String getHourString() {
         if(hour < 10) {
             return "0"+this.hour;
@@ -29,6 +44,10 @@ public class VisitationTimeDTO {
         return ""+this.hour;
     }
 
+    /**
+     * Returns minute as a double digit string
+     * @return string version of minutes
+     */
     private String getMinuteString() {
         if(minute < 10) {
             return "0"+this.minute;
@@ -36,6 +55,11 @@ public class VisitationTimeDTO {
         return ""+this.minute;
     }
 
+    /**
+     * Checks if a selected dentistVisitDTO has this time selected
+     * @param target object that should be a dentistVisitDTO to succeed
+     * @return true if the DTO has this time selected, false if not
+     */
     public boolean checkIfSelectedInDentistVisitDTO(Object target) {
         if(target == null) {
             return false;

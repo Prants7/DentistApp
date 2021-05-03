@@ -6,8 +6,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+/**
+ * Form for adding new dentist visit or changing an old entry
+ */
 public class DentistVisitForm {
-
     @Size(min = 1, max = 50)
     String dentistName;
 

@@ -2,10 +2,12 @@ package com.cgi.dentistapp.entity;
 
 import javax.persistence.*;
 
+/**
+ * Entity element for saving dentist visits into repository
+ */
 @Entity
 @Table(name = "dentist_visit")
 public class DentistVisitEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -50,6 +52,10 @@ public class DentistVisitEntity {
         this.dateTime = dateTime;
     }
 
+    /**
+     * To string method
+     * @return value as "Dentist at dateTime"
+     */
     public String toString() {
         return this.dentist.getName() + " at: " + this.dateTime;
     }
