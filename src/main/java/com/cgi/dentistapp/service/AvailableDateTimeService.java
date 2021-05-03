@@ -67,7 +67,7 @@ public class AvailableDateTimeService {
         if(this.visitationTimes == null) {
             setUpDummyTime();
         }
-        return this.visitationTimes;
+        return new ArrayList<>(this.visitationTimes);
     }
 
     private void setUpDummyTime() {

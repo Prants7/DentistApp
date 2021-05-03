@@ -2,14 +2,17 @@ package com.cgi.dentistapp.verification.DentistVisitChecking;
 
 import com.cgi.dentistapp.dto.DentistDTO;
 import com.cgi.dentistapp.dto.DentistVisitDTO;
+import com.cgi.dentistapp.dto.VisitationDateDTO;
+import com.cgi.dentistapp.dto.VisitationTimeDTO;
+import com.cgi.dentistapp.service.AvailableDateTimeService;
 import com.cgi.dentistapp.service.DentistService;
 import com.cgi.dentistapp.service.DentistVisitService;
-import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.DentistNotFoundException;
-import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.DentistVisitRegisterException;
-import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.TimeTakenException;
+import com.cgi.dentistapp.verification.DentistVisitChecking.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Component("VisitCheckerImpl")
@@ -18,6 +21,8 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     private DentistVisitService dentistVisitService;
     @Autowired
     private DentistService dentistService;
+    @Autowired
+    private AvailableDateTimeService dateTimeService;
 
     @Override
     public boolean DTOVerification(DentistVisitDTO targetDTO) throws DentistVisitRegisterException {
@@ -27,6 +32,10 @@ public class VisitCheckerImpl implements DentistVisitChecker {
         }
         if(!hasAllowedDate(targetDTO)) {
             System.out.println("failed at allowed date check");
+            return false;
+        }
+        if(!hasAllowedTime(targetDTO)) {
+            System.out.println("failed at allowed time check");
             return false;
         }
         if(!hasAvailableDate(targetDTO)) {
@@ -48,8 +57,38 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     }
 
     private boolean hasAllowedDate(DentistVisitDTO targetDTO) {
-        //todo
+        List<VisitationDateDTO> allowedDates = this.dateTimeService.getAllVisitationDates();
+        if(!findMatchingDate(allowedDates, targetDTO.getVisitDateString())) {
+            throw new NotAllowedDateException("Date: "+targetDTO.getVisitDateString()+" is not allowed");
+        }
         return true;
+    }
+
+    private boolean findMatchingDate(List<VisitationDateDTO> checkedList, String searchedDateAsString) {
+        for(VisitationDateDTO oneDTO : checkedList) {
+            if(oneDTO.toString().equals(searchedDateAsString)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean hasAllowedTime(DentistVisitDTO targetDTO) {
+        List<VisitationTimeDTO> allowedTimes = this.dateTimeService.getAllVisitationTimes();
+        if(!findMatchingTime(allowedTimes, targetDTO.getVisitTimeString())) {
+            throw new NotAllowedTimeException("Time: "+targetDTO.getVisitTimeString()+" is not allowed");
+        }
+        return true;
+    }
+
+    private boolean findMatchingTime(List<VisitationTimeDTO> checkedList, String searchedTimeAsString) {
+        for(VisitationTimeDTO oneDTO : checkedList) {
+            if(oneDTO.toString().equals(searchedTimeAsString)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean hasAvailableDate(DentistVisitDTO targetDTO) throws TimeTakenException {
