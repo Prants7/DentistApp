@@ -45,7 +45,14 @@ public class DentistVisitService {
     }
 
     public void updateVisit(DentistVisitDTO visitDTO) {
-        DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
+        DentistVisitEntity entityAttempt;
+        try {
+            entityAttempt = this.DTOToEntity(visitDTO);
+        }
+        catch (DentistVisitRegisterException exception) {
+            throw exception;
+        }
+
         if(entityAttempt == null) {
             return;
         }

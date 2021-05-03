@@ -6,6 +6,10 @@
 <div th:replace="fragments/navbar :: navigation"> </div>
 <h2>edit page</h2>
 <form action="#" th:action="@{/details/{id}/edit (id=${selectedVisit.id})}" th:object="${dentistVisitDTO}" method="post">
+    <div th:if="${#fields.hasErrors('global')}">
+        <h3>Server side errors:</h3>
+        <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
+    </div>
     <table th:replace="fragments/registrationForm :: registrationForm"></table>
 
 </form>

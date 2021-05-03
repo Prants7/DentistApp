@@ -94,8 +94,24 @@ public class VisitCheckerImpl implements DentistVisitChecker {
     private boolean hasAvailableDate(DentistVisitDTO targetDTO) throws TimeTakenException {
         //throw new TimeTakenException("Testing the exception");
         List<DentistVisitDTO> searchForTakenTime = this.dentistVisitService.findVisitsWithSameTIme(targetDTO);
-        if(!searchForTakenTime.isEmpty()) {
+        /*if(searchForTakenTime.size() > 1) {
             throw new TimeTakenException("Selected time has already been taken");
+        }
+        if(targetDTO.hasId()) {
+            if(searchForTakenTime.get(0).getId() != targetDTO.getId()) {
+                throw new TimeTakenException("Selected time has already been taken");
+            }
+        }*/
+        if(!searchForTakenTime.isEmpty()) {
+            if(searchForTakenTime.size() > 1) {
+                throw new TimeTakenException("Selected time has already been taken");
+            }
+            if(!targetDTO.hasId()) {
+                throw new TimeTakenException("Selected time has already been taken");
+            }
+            if(targetDTO.getId() != searchForTakenTime.get(0).getId()) {
+                throw new TimeTakenException("Selected time has already been taken");
+            }
         }
         return true;
     }
