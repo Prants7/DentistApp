@@ -7,8 +7,9 @@
     <tr>
         <td><p th:text="#{dentist.name}">dentist.name</p></td>
         <td>
-            <select th:field="*{dentistName}">
-                <option th:each="dentist: ${dentists}" th:value="${dentist.getName()}" th:text="${dentist.getName()}">
+            <select id="dentistName" name="dentistName">
+                <option th:each="dentist: ${dentists}" th:value="${dentist.getName()}" th:text="${dentist.getName()}"
+                        th:selected="${dentist.checkIfSelectedInDentistVisitDTO(selectedVisit)}">
                 </option>
             </select>
         </td>
@@ -17,8 +18,9 @@
     <tr>
         <td><p th:text="#{visit.date}">visit.date</p></td>
         <td>
-            <select th:field="*{visitDate}">
-                <option th:each="visitDate: ${dates}" th:value="${visitDate.toString()}" th:text="${visitDate.toString()}">
+            <!--select th:field="*{visitDate}"--><select id="visitDate" name="visitDate">
+                <option th:each="visitDate: ${dates}" th:value="${visitDate.toString()}" th:text="${visitDate.toString()}"
+                        th:selected="${visitDate.checkIfSelectedInDentistVisitDTO(selectedVisit)}">
                 </option>
             </select>
         </td>
@@ -27,8 +29,9 @@
     <tr>
         <td><p th:text="#{visit.time}">visit.time</p></td>
         <td>
-            <select th:field="*{visitTime}">
-                <option th:each="visitTime: ${times}" th:value="${visitTime.toString()}" th:text="${visitTime.toString()}">
+            <!--select th:field="*{visitTime}"--><select id="visitTime" name="visitTime">
+                <option th:each="visitTime: ${times}" th:value="${visitTime.toString()}" th:text="${visitTime.toString()}"
+                        th:selected="${visitTime.checkIfSelectedInDentistVisitDTO(selectedVisit)}">
                 </option>
             </select>
         </td>

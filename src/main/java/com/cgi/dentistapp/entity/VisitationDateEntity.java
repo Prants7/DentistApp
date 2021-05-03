@@ -1,6 +1,8 @@
 package com.cgi.dentistapp.entity;
 
 
+import com.cgi.dentistapp.dto.DentistVisitDTO;
+
 public class VisitationDateEntity {
 
     private int day;
@@ -46,6 +48,25 @@ public class VisitationDateEntity {
 
     public int getYear() {
         return year;
+    }
+
+    public boolean checkIfSelectedInDentistVisitDTO(Object target) {
+        //System.out.println("Checking equality for dentist");
+        if(target == null) {
+            //System.out.println("Check was false, on null");
+            return false;
+        }
+        if(target.getClass() != DentistVisitDTO.class) {
+            //System.out.println("Check was false, on dentistVisitDTO class");
+            return false;
+        }
+        DentistVisitDTO castTarget = (DentistVisitDTO) target;
+        if(!this.toString().equals(castTarget.getVisitDateString())) {
+            //System.out.println("Check was false, on name equals");
+            return false;
+        }
+        //System.out.println("Check was true");
+        return true;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.cgi.dentistapp.entity;
 
+import com.cgi.dentistapp.dto.DentistVisitDTO;
+
 public class VisitationTimeEntity {
 
     private int hour;
@@ -34,5 +36,24 @@ public class VisitationTimeEntity {
             return "0"+this.minute;
         }
         return ""+this.minute;
+    }
+
+    public boolean checkIfSelectedInDentistVisitDTO(Object target) {
+        //System.out.println("Checking equality for dentist");
+        if(target == null) {
+            //System.out.println("Check was false, on null");
+            return false;
+        }
+        if(target.getClass() != DentistVisitDTO.class) {
+            //System.out.println("Check was false, on dentistVisitDTO class");
+            return false;
+        }
+        DentistVisitDTO castTarget = (DentistVisitDTO) target;
+        if(!this.toString().equals(castTarget.getVisitTimeString())) {
+            //System.out.println("Check was false, on name equals");
+            return false;
+        }
+        //System.out.println("Check was true");
+        return true;
     }
 }

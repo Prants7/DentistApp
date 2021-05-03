@@ -78,4 +78,27 @@ public class DentistVisitDTO {
     public boolean hasId() {
         return id != null;
     }
+
+    public boolean checkEquality(Object target) {
+        System.out.println("Checking equality");
+        if(target == null) {
+            System.out.println("Check was false");
+            return false;
+        }
+        if(target.getClass() != this.getClass()) {
+            System.out.println("Check was false");
+            return false;
+        }
+        if(!this.hasId()) {
+            System.out.println("Check was false");
+            return false;
+        }
+        DentistVisitDTO castTarget = (DentistVisitDTO) target;
+        if(this.id != castTarget.getId()) {
+            System.out.println("Check was false");
+            return false;
+        }
+        System.out.println("Check was true");
+        return true;
+    }
 }
