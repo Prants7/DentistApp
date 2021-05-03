@@ -52,7 +52,11 @@ public class DentistService {
     }
 
     public DentistDTO findDentistByName(String name) {
-        return this.entityToDTO(findDentistByNameEntity(name));
+        DentistEntity foundDentist = findDentistByNameEntity(name);
+        if(foundDentist != null) {
+            return this.entityToDTO(foundDentist);
+        }
+        return null;
     }
 
     public void addDentistToDataBase(DentistDTO newDentist) {

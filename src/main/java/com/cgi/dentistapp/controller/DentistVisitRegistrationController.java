@@ -47,9 +47,22 @@ public class DentistVisitRegistrationController extends WebMvcConfigurerAdapter 
     }
 
     private void populateDentistVisitFormModel(Model model) {
+        //model.addAttribute("dentists", this.getAListOfDentistWithAddedFake());
         model.addAttribute("dentists", this.dentistService.getAllDentists());
         model.addAttribute("dates", this.availableDateTimeService.getAllVisitationDates());
         model.addAttribute("times", this.availableDateTimeService.getAllVisitationTimes());
+    }
+
+    private DentistDTO makeFakeDentist() {
+        DentistDTO newDentist = new DentistDTO();
+        newDentist.setName("Fake Dentist");
+        return newDentist;
+    }
+
+    private List<DentistDTO> getAListOfDentistWithAddedFake() {
+        List<DentistDTO> foundDentists = this.dentistService.getAllDentists();
+        foundDentists.add(this.makeFakeDentist());
+        return foundDentists;
     }
 
     @PostMapping("/registration")
