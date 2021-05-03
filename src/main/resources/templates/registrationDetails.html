@@ -1,18 +1,18 @@
 <html>
 <head>
-    <title>Details</title>
+    <title th:text="#{details.title}">details.title</title>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navigation"> </div>
-<h2>details page</h2>
+<h2 th:text="#{details.title}">details.title</h2>
 <table>
     <tr>
         <td th:text="#{registrationList.header.id}"> registrationList.header.id </td>
         <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
         <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
         <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
-        <td> edit </td>
-        <td> delete </td>
+        <td th:text="#{details.editButton}"> details.editButton </td>
+        <td th:text="#{details.deleteButton}"> details.deleteButton </td>
     </tr>
 
     <tr>
@@ -21,11 +21,11 @@
         <td th:text="${selectedVisit.getVisitDateString()}" />
         <td th:text="${selectedVisit.getVisitTimeString()}" />
         <td>
-            <a th:href="@{/details/{id}/edit (id = ${selectedVisit.id})}">edit</a>
+            <a th:href="@{/details/{id}/edit (id = ${selectedVisit.id})}" th:text="#{details.editButton}">details.editButton</a>
         </td>
         <td>
             <form th:action="@{/details/{id}/delete(id=${selectedVisit.id})}" method="POST">
-                <button type="submit">delete</button>
+                <button type="submit" th:text="#{details.deleteButtonSign}"></button>
             </form>
         </td>
     </tr>

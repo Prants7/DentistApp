@@ -1,9 +1,10 @@
 <html>
 <head>
-    <title>Home</title>
+    <title th:text="#{home.title}">home.title</title>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navigation"> </div>
-<p>This is the home page of dentist registration app, developed by Tõnis Prants</p>
+<p th:text="#{home.greeting}">home.greeting</p>
+<P th:text="#{home.developed}">home.developed</P>
 </body>
 </html>

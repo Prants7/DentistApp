@@ -1,14 +1,11 @@
 <html>
-<head>
-    <title>Search</title>
-</head>
 <body>
 <div th:fragment="search">
-    <p> Searching</p>
+    <p th:text="#{searching.title}"> searching.title</p>
     <form action="#" th:action="@{/registrationList/search}" th:object="${searchForm}" method="post">
         <table>
             <tr>
-                <td><p>search for</p></td>
+                <td><p th:text="#{searching.guide}">searching.guide</p></td>
                 <td>
                     <input type="text" th:field="*{dentistNameSearch}"/>
                 </td>
@@ -16,7 +13,7 @@
             </tr>
             <tr>
                 <td>
-                    <button type="submit">search</button>
+                    <button type="submit" th:text="#{searching.button}"></button>
                 </td>
             </tr>
         </table>

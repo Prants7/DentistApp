@@ -1,4 +1,7 @@
 <html>
+<head>
+    <title th:text="#{registrationList.title}">registrationList.title</title>
+</head>
 <body>
     <div th:replace="fragments/navbar :: navigation"> </div>
     <div th:replace="fragments/searchBox :: search"> </div>
@@ -7,7 +10,7 @@
         <h2 th:text="#{registrationList.header}">registrationList.header</h2>
     </tr>
     <tr th:unless="${search == null}">
-        <h2>Search results</h2>
+        <h2 th:text="#{registrationList.title.search}">registrationList.title.search</h2>
     </tr>
 
     <table>
@@ -16,11 +19,11 @@
             <td th:text="#{registrationList.header.dentistName}"> registrationList.header.dentistName </td>
             <td th:text="#{registrationList.header.visitDate}"> registrationList.header.visitDate </td>
             <td th:text="#{registrationList.header.dentistTime}"> registrationList.header.dentistTime </td>
-            <td> details </td>
+            <td th:text="#{registrationList.header.details}"> registrationList.header.details </td>
         </tr>
 
         <tr th:if="${registrations.empty}">
-            <td colspan="2"> No found registrations </td>
+            <td colspan="2" th:text="#{registrationList.empty}"> registrationList.empty </td>
         </tr>
 
         <tr th:each="oneRegistration: ${registrations}">
@@ -29,7 +32,8 @@
             <td th:text="${oneRegistration.getVisitDateString()}" />
             <td th:text="${oneRegistration.getVisitTimeString()}" />
             <td>
-                <a th:href="@{/details/{id}(id = ${oneRegistration.id})}">details</a>
+                <a th:href="@{/details/{id}(id = ${oneRegistration.id})}"
+                   th:text="#{registrationList.detailsButton}"> registrationList.detailsButton </a>
             </td>
         </tr>
 
