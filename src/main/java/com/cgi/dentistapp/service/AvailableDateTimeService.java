@@ -1,7 +1,7 @@
 package com.cgi.dentistapp.service;
 
-import com.cgi.dentistapp.entity.VisitationDateEntity;
-import com.cgi.dentistapp.entity.VisitationTimeEntity;
+import com.cgi.dentistapp.dto.VisitationDateDTO;
+import com.cgi.dentistapp.dto.VisitationTimeDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,10 +9,10 @@ import java.util.List;
 
 @Service
 public class AvailableDateTimeService {
-    private List<VisitationDateEntity> visitationDates;
-    private List<VisitationTimeEntity> visitationTimes;
+    private List<VisitationDateDTO> visitationDates;
+    private List<VisitationTimeDTO> visitationTimes;
 
-    public List<VisitationDateEntity> getAllVisitationDates() {
+    public List<VisitationDateDTO> getAllVisitationDates() {
         if(this.visitationDates == null) {
             this.setUpDummyData();
         }
@@ -25,17 +25,17 @@ public class AvailableDateTimeService {
     }
 
     private void makeDummyData() {
-        this.visitationDates.add(new VisitationDateEntity(24,4, 2021));
-        this.visitationDates.add(new VisitationDateEntity(25,4, 2021));
-        this.visitationDates.add(new VisitationDateEntity(3,5, 2021));
-        this.visitationDates.add(new VisitationDateEntity(4,5, 2021));
+        this.visitationDates.add(new VisitationDateDTO(24,4, 2021));
+        this.visitationDates.add(new VisitationDateDTO(25,4, 2021));
+        this.visitationDates.add(new VisitationDateDTO(3,5, 2021));
+        this.visitationDates.add(new VisitationDateDTO(4,5, 2021));
     }
 
     private void initDummyDataList() {
         this.visitationDates = new ArrayList<>();
     }
 
-    public List<VisitationTimeEntity> getAllVisitationTimes() {
+    public List<VisitationTimeDTO> getAllVisitationTimes() {
         if(this.visitationTimes == null) {
             setUpDummyTime();
         }
@@ -49,8 +49,8 @@ public class AvailableDateTimeService {
 
     private void makeDummyDataForTime() {
         for(int i = 0; i < 5; i++) {
-            this.visitationTimes.add(new VisitationTimeEntity(8+i, 0));
-            this.visitationTimes.add(new VisitationTimeEntity( 8+i, 30));
+            this.visitationTimes.add(new VisitationTimeDTO(8+i, 0));
+            this.visitationTimes.add(new VisitationTimeDTO( 8+i, 30));
         }
     }
 

@@ -1,13 +1,13 @@
-package com.cgi.dentistapp.entity;
+package com.cgi.dentistapp.dto;
 
 import com.cgi.dentistapp.dto.DentistVisitDTO;
 
-public class VisitationTimeEntity {
+public class VisitationTimeDTO {
 
     private int hour;
     private int minute;
 
-    public VisitationTimeEntity(int hour, int minute) {
+    public VisitationTimeDTO(int hour, int minute) {
         this.hour = hour;
         this.minute = minute;
     }
