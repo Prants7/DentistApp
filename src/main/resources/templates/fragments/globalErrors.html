@@ -1,0 +1,8 @@
+<html>
+<body>
+<div th:fragment="globalError" th:if="${#fields.hasErrors('global')}">
+    <h3 th:text="#{server.error}">server.error</h3>
+    <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
+</div>
+</body>
+</html>
