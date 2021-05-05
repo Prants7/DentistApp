@@ -116,6 +116,12 @@ public class DentistVisitService {
         return DTOElement.getVisitDateString()+"/"+DTOElement.getVisitTimeString();
     }
 
+    /**
+     * Checks if a DTO element has an id assigned to it, and if it does, adds it to input entity
+     * @param DTOElement input DTO element, this is checked for id
+     * @param entityToChange entity element where the id gets added if DTO posses one
+     * @return the same input entity that would be changed in case there is an id
+     */
     private DentistVisitEntity checkAndAddIdToEntity(DentistVisitDTO DTOElement, DentistVisitEntity entityToChange) {
         if(DTOElement.hasId()) {
             entityToChange.setId(DTOElement.getId());
@@ -123,6 +129,11 @@ public class DentistVisitService {
         return entityToChange;
     }
 
+    /**
+     * for turning a list of entity into a list of DTOs
+     * @param elementEntityList list of entities to be converted
+     * @return list of converted dentistVisitDTOs
+     */
     private List<DentistVisitDTO> entityToDTOList(List<DentistVisitEntity> elementEntityList) {
         List<DentistVisitDTO> finalList = new ArrayList<>();
         DentistVisitDTO oneDTO;
@@ -135,18 +146,33 @@ public class DentistVisitService {
         return finalList;
     }
 
+    /**
+     * for converting one DentistVisitEntity to DTO
+     * @param elementEntity entity element to be converted
+     * @return the new converted DTO
+     */
     private DentistVisitDTO entityToDTO(DentistVisitEntity elementEntity) {
         DentistVisitDTO newDTO = generateNewDTOWithoutID(elementEntity);
         newDTO.setId(elementEntity.getId());
         return newDTO;
     }
 
+    /**
+     * Makes a DTO based on Entity without copying the id
+     * @param elementEntity entity to be converted into DTO
+     * @return DTO element without an id
+     */
     private DentistVisitDTO generateNewDTOWithoutID(DentistVisitEntity elementEntity) {
         Date newDate = attemptToExtractDateFromEntity(elementEntity);
         DentistVisitDTO newDTO = new DentistVisitDTO(elementEntity.getDentist().getName(), newDate, newDate);
         return newDTO;
     }
 
+    /**
+     * method that tries to convert an entity date string into a Date object
+     * @param elementEntity Entity where date string is extracted from
+     * @return if successful, the converted Date object
+     */
     private Date attemptToExtractDateFromEntity(DentistVisitEntity elementEntity) {
         //NB! if it corrupts it gives current moment
         Date newDate = new Date();
@@ -159,10 +185,20 @@ public class DentistVisitService {
         return newDate;
     }
 
+    /**
+     * Method that checks if a DentistVisitDTO contains allowed values for turning into an entity
+     * @param elementToCheck DTO that is checked
+     * @return true, if the contained data is allowed, false if not
+     */
     private boolean allowedToTurnIntoEntity(DentistVisitDTO elementToCheck) {
         return checker.DTOVerification(elementToCheck);
     }
 
+    /**
+     * For finding a DentistVisit by its id in the repository
+     * @param id id that is searched for
+     * @return DentistVisitDTO if element was found, null if the id is not used
+     */
     public DentistVisitDTO getVisitById(Long id) {
         DentistVisitEntity foundEntity = this.dentistVisitRepository.findOne(id);
         if(foundEntity != null) {
@@ -171,21 +207,41 @@ public class DentistVisitService {
         return null;
     }
 
+    /**
+     * For deleting a visit Entity in the repository
+     * @param id id of the element to be deleted
+     * @return always return true
+     */
     public boolean deleteEntry(Long id) {
         this.dentistVisitRepository.delete(id);
         return true;
     }
 
+    /**
+     * For finding visits that have the same selected time as the input visit
+     * @param visitDTO DTO where the searched for time is saved
+     * @return list of found entities with the same date and time
+     */
     public List<DentistVisitDTO> findVisitsWithSameTIme(DentistVisitDTO visitDTO) {
         String searchString = this.formatMergeDTODateAndTime(visitDTO);
         List<DentistVisitEntity> foundEntities = this.dentistVisitRepository.findByDateTime(searchString);
         return this.entityToDTOList(foundEntities);
     }
 
+    /**
+     * For searching visitEntries that have a doctor whos name contains the input string
+     * @param firstNamePart string that will be searched for
+     * @return list of found visits as DTOs
+     */
     public List<DentistVisitDTO> findByDentistNameContains(String firstNamePart) {
         return this.entityToDTOList(this.dentistVisitRepository.findByDentistNameContains(firstNamePart));
     }
 
+    /**
+     * For searching out visitEntries that have a date time string that contains the input string
+     * @param dateTimePart string that will be searched for
+     * @return list of found visits as DTOs
+     */
     public List<DentistVisitDTO> findByDateTimeContains(String dateTimePart) {
         return this.entityToDTOList(this.dentistVisitRepository.findByDateTimeContains(dateTimePart));
     }
