@@ -7,9 +7,9 @@
             <tr>
                 <td><p th:text="#{searching.guide}">searching.guide</p></td>
                 <td>
-                    <input type="text" th:field="*{dentistNameSearch}"/>
+                    <input type="text" th:field="*{searchString}"/>
                 </td>
-                <td th:if="${#fields.hasErrors('dentistNameSearch')}" th:errors="*{dentistNameSearch}">name error</td>
+                <td th:if="${#fields.hasErrors('searchString')}" th:errors="*{searchString}">name error</td>
             </tr>
             <tr>
                 <td>

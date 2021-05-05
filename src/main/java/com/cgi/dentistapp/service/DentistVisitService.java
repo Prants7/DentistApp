@@ -30,45 +30,76 @@ public class DentistVisitService {
 
     private SimpleDateFormat mergedDateFormatter = new SimpleDateFormat("dd.MM.yyyy/HH:mm");
 
+    /**
+     * Method for saving a new visit to the repository
+     * @param visitDTO DTO of the new visit
+     * @throws DentistVisitRegisterException exceptions that are thrown when DTO posses invalid data
+     */
     public void addVisit(DentistVisitDTO visitDTO) throws DentistVisitRegisterException {
-        try {
-            DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
-            this.dentistVisitRepository.save(entityAttempt);
-        }
+        //try {
+        DentistVisitEntity entityAttempt = this.DTOToEntity(visitDTO);
+        this.dentistVisitRepository.save(entityAttempt);
+        /*}
         catch (DentistVisitRegisterException exception) {
             throw exception;
-        }
+        }*/
     }
 
-    public void updateVisit(DentistVisitDTO visitDTO) {
+    /**
+     * For changing an existing data entry in the repository, doesn't work if DTO doesn't have an assigned id
+     * @param visitDTO
+     * @throws DentistVisitRegisterException exceptions that are thrown when DTO posses invalid data
+     */
+    public void updateVisit(DentistVisitDTO visitDTO) throws DentistVisitRegisterException {
         DentistVisitEntity entityAttempt;
-        try {
-            entityAttempt = this.DTOToEntity(visitDTO);
-        }
+        //try {
+        entityAttempt = this.DTOToEntity(visitDTO);
+        /*}
         catch (DentistVisitRegisterException exception) {
             throw exception;
-        }
-
-        if(entityAttempt == null) {
-            return;
-        }
-        if(entityAttempt.getId() == null) {
+        }*/
+        if(!updatableEntityAcceptanceCheck(entityAttempt)) {
             return;
         }
         this.dentistVisitRepository.save(entityAttempt);
     }
 
+    /**
+     * Combines id checking of visit updating into one method
+     * @param checkedEntity visit that is checked
+     * @return false if the entity is not allowed as new version of an existing entry, true if it is
+     */
+    private boolean updatableEntityAcceptanceCheck(DentistVisitEntity checkedEntity) {
+        if(checkedEntity == null) {
+            return false;
+        }
+        if(checkedEntity.getId() == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * For getting all saved visits
+     * @return list of visit DTOs
+     */
     public List<DentistVisitDTO> getAllVisits() {
         return this.entityToDTOList(dentistVisitRepository.findAll());
     }
 
+    /**
+     * For turning a single DentistVisitDTO into a DentistVisitEntity
+     * @param DTOElement DTO to be turned
+     * @return if succesful, a Entity element version of input DTO
+     * @throws DentistVisitRegisterException class of exceptions thrown when input data is not allowed
+     */
     private DentistVisitEntity DTOToEntity(DentistVisitDTO DTOElement) throws DentistVisitRegisterException {
-        try {
-            this.allowedToTurnIntoEntity(DTOElement);
-        }
+        //try {
+        this.allowedToTurnIntoEntity(DTOElement);
+        /*}
         catch(DentistVisitRegisterException exception) {
             throw exception;
-        }
+        }*/
         DentistVisitEntity resultEntity = new DentistVisitEntity(formatMergeDTODateAndTime(DTOElement));
         resultEntity = this.dentistService.addDentistEntityToVisitEntity(
                 resultEntity, this.dentistService.getIdOfDentistByName(DTOElement.getDentistName()));
@@ -76,6 +107,11 @@ public class DentistVisitService {
         return resultEntity;
     }
 
+    /**
+     * For making a complete date and time string for an entity, out of a DTO elements date and time
+     * @param DTOElement DTO element used as the source for date and time
+     * @return unified string that contains both date and time
+     */
     private String formatMergeDTODateAndTime(DentistVisitDTO DTOElement) {
         return DTOElement.getVisitDateString()+"/"+DTOElement.getVisitTimeString();
     }
