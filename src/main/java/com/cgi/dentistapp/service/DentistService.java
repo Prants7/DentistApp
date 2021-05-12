@@ -91,8 +91,9 @@ public class DentistService {
      * for adding a new dentist through code
      * @param newDentist new dentist values
      */
-    public void addDentistToDataBase(DentistDTO newDentist) {
-        this.dentistRepository.save(this.DTOToEntity(newDentist));
+    public DentistDTO addDentistToDataBase(DentistDTO newDentist) {
+        DentistEntity result = this.dentistRepository.save(this.DTOToEntity(newDentist));
+        return this.entityToDTO(result);
     }
 
     /**
