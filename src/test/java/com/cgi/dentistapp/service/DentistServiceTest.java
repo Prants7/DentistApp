@@ -16,7 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntToLongFunction;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,8 +32,10 @@ public class DentistServiceTest extends TestCase {
 
     @Before
     public void setUpMockRepository() {
-        List<DentistEntity> testableList = this.makeListOfDentistEntities(this.getTestableNames());
+        List<String> testableNames = this.getTestableNames();
+        List<DentistEntity> testableList = this.makeListOfDentistEntities(testableNames);
         Mockito.when(mockRepository.findAll()).thenReturn(testableList);
+        Mockito.when(mockRepository.findByName(testableNames.get(0))).thenReturn(Arrays.asList(testableList.get(0)));
     }
 
     private DentistDTO getTestableDentistDTO(String name) {
@@ -51,23 +55,31 @@ public class DentistServiceTest extends TestCase {
 
     private List<DentistEntity> makeListOfDentistEntities(List<String> dentistNames) {
         List<DentistEntity> dentists = new ArrayList<>();
+        Long idAssigner = new Long(0);
         for(String oneName : dentistNames) {
             DentistEntity newEntry = new DentistEntity();
             newEntry.setName(oneName);
+            idAssigner++;
+            newEntry.setId(idAssigner);
             dentists.add(newEntry);
         }
         return dentists;
     }
 
-
-
     @Test
-    public void serviceCanReturnAListOfDentistDTOs() {
+    public void serviceCanPerformGetAll() {
         List<DentistDTO> listOfDentists = dentistService.getAllDentists();
         assertEquals("Returned list needs to have 4 elements", 4, listOfDentists.size());
         List<String> names = this.getTestableNames();
         assertEquals("Element names need to stay same for DTO", names.get(0), listOfDentists.get(0).getName());
         assertEquals("Service must handle different names for DTO", names.get(1), listOfDentists.get(1).getName());
+    }
+
+    @Test
+    public void serviceCanFindIdOfDentistByName() {
+        Long foundId = this.dentistService.getIdOfDentistByName(this.getTestableNames().get(0));
+        assertEquals("Returns an id for first element", 1
+                , (long) foundId );
     }
 
 }
