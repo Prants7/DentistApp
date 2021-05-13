@@ -1,7 +1,9 @@
 package com.cgi.dentistapp.service;
 
 import com.cgi.dentistapp.dto.DentistDTO;
+import com.cgi.dentistapp.dto.DentistVisitDTO;
 import com.cgi.dentistapp.entity.DentistEntity;
+import com.cgi.dentistapp.entity.DentistVisitEntity;
 import com.cgi.dentistapp.repositories.DentistRepository;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -36,6 +38,7 @@ public class DentistServiceTest extends TestCase {
         List<DentistEntity> testableList = this.makeListOfDentistEntities(testableNames);
         Mockito.when(mockRepository.findAll()).thenReturn(testableList);
         Mockito.when(mockRepository.findByName(testableNames.get(0))).thenReturn(Arrays.asList(testableList.get(0)));
+        Mockito.when(mockRepository.findOne(new Long(1))).thenReturn(testableList.get(0));
     }
 
     private DentistDTO getTestableDentistDTO(String name) {
@@ -66,6 +69,11 @@ public class DentistServiceTest extends TestCase {
         return dentists;
     }
 
+    private DentistVisitEntity getTestableDentistVisitEntity() {
+        DentistVisitEntity testVisit = new DentistVisitEntity();
+        return testVisit;
+    }
+
     @Test
     public void serviceCanPerformGetAll() {
         List<DentistDTO> listOfDentists = dentistService.getAllDentists();
@@ -81,5 +89,26 @@ public class DentistServiceTest extends TestCase {
         assertEquals("Returns an id for first element", 1
                 , (long) foundId );
     }
+
+    @Test
+    public void serviceCanAddDentistEntityToDentistVisitEntity() {
+        DentistVisitEntity testVisit = this.getTestableDentistVisitEntity();
+        this.dentistService.addDentistEntityToVisitEntity(testVisit, new Long(1));
+        assertEquals("Visit entity should have gotten dentist with the input Id",
+                new Long(1), testVisit.getDentist().getId());
+    }
+
+    @Test
+    public void serviceCanFindDentistByName() {
+        String name = this.getTestableNames().get(0);
+        DentistDTO foundDentist = this.dentistService.findDentistByName(name);
+        assertEquals("Found dentist needs to have right name", name, foundDentist.getName());
+    }
+
+    public void serviceCanAddNewDentistToRepository() {
+        //TODO
+    }
+
+
 
 }
